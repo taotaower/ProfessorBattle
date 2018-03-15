@@ -8,12 +8,3 @@ config :profbattle, ProfbattleWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
-
-# Configure your database
-config :profbattle, Profbattle.Repo,
-  adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
-  database: "profbattle_test",
-  hostname: "localhost",
-  pool: Ecto.Adapters.SQL.Sandbox
