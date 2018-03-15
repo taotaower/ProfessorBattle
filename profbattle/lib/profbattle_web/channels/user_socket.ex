@@ -3,7 +3,7 @@ defmodule ProfbattleWeb.UserSocket do
 
   ## Channels
   # channel "room:*", ProfbattleWeb.RoomChannel
-  channel "games:lobby", ProfbattleWeb.GamesChannel
+  channel "games:*", ProfbattleWeb.GamesChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
