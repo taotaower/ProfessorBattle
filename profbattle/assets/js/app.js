@@ -18,4 +18,31 @@ import "phoenix_html"
 // Local files can be imported directly using relative
 // paths "./socket" or full ones "web/static/js/socket".
 
-// import socket from "./socket"
+import socket from "./socket"
+
+import run_game from "./battle";
+
+function form_init() {
+    $('#game-button').click(() => {
+        let name = document.getElementById('game-input').value;
+    if (name.length > 0) {
+        window.open("/game/" + name, "_self");
+    }
+});
+}
+
+function init() {
+    let root = document.getElementById('game');
+    if (root) {
+        var  name = window.location.href.substr(33);
+        let channel = socket.channel("games:" + name, {});
+        run_game(root, channel);
+    }
+
+    if (document.getElementById('index-page')) {
+        form_init();
+    }
+}
+
+// Use jQuery to delay until page loaded.
+$(init);
