@@ -47,6 +47,20 @@ function form_init() {
 
     });
 
+    $('#game-table').on('click','.btn-join',function () {
+        console.log("clicking game table")
+        var name = $(this).val();
+        var url      = window.location.href;
+
+        if (name){
+            document.location = url + 'game/' + name
+        }
+        else {
+            alert("Something Wrong")
+        }
+
+    })
+
 }
 
 function init() {

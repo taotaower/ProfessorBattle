@@ -27,7 +27,7 @@
             </tr>
       </thead>
 
- <tbody>
+ <tbody id="game-table">
     <%= for state <- @states do %>
 
     <tr class="row">
@@ -47,10 +47,10 @@
 
 
            <%= if state.players == 2 do %>
-           <td class="col-4"> <button class=" btn btn-success">Watch</button></td>
+           <td class="col-4"> <button class="btn btn-success btn-join" value="<%= state.name%>">Watch</button></td>
             <% else %>
             <td class="col-4">
-              <button class="btn btn-primary">Join</button>
+              <button class="btn btn-primary btn-join" value="<%= state.name%>">Join</button>
               </td>
             <% end %>
 

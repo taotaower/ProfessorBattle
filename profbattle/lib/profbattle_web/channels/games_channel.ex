@@ -5,7 +5,20 @@ defmodule ProfbattleWeb.GamesChannel do
 
   def join("games:" <> name, payload, socket) do
     if authorized?(payload) do
-      game = Profbattle.GameBackup.load(name)  || Game.new()
+      game = Profbattle.GameBackup.load(name)
+
+      IO.inspect "join a game condition"
+      IO.inspect game
+
+      if game do
+
+        if length(game) == 1 do
+          game = Game.addPlayer(game)
+        end
+
+        else
+        game = Game.new()
+      end
       socket = socket
                |> assign(:game, game)
                |> assign(:name, name)

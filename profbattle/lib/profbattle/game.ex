@@ -11,4 +11,11 @@ defmodule Profbattle.Game do
 
     end
 
+
+   def addPlayer(game) do
+
+     [%{player1: %{}},%{player2: %{}}]
   end
+
+
+end
