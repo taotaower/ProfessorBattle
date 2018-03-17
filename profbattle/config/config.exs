@@ -5,14 +5,10 @@
 # is restricted to this project.
 use Mix.Config
 
-# General application configuration
-config :profbattle,
-  ecto_repos: [Profbattle.Repo]
-
 # Configures the endpoint
 config :profbattle, ProfbattleWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "MefgYCy2ccZz9lCyVaotdWvmt8DLWBejuiWqy2N5J6ChOTqj28GquHUyb4brEoTl",
+  secret_key_base: "WHDUMVQNmFcWnSvgkFXftSv+NpApb9yfOhKH/WOYyRCrNrSXdZ9iooSLcRl0ceGa",
   render_errors: [view: ProfbattleWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Profbattle.PubSub,
            adapter: Phoenix.PubSub.PG2]

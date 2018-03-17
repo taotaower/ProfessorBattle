@@ -36,7 +36,7 @@ defmodule ProfbattleWeb.Endpoint do
   plug Plug.Session,
     store: :cookie,
     key: "_profbattle_key",
-    signing_salt: "5wYArzgd"
+    signing_salt: "zgNyM1mt"
 
   plug ProfbattleWeb.Router
 
