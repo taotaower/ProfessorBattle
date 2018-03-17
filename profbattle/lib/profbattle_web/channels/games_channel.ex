@@ -9,8 +9,9 @@ defmodule ProfbattleWeb.GamesChannel do
       socket = socket
                |> assign(:game, game)
                |> assign(:name, name)
-      states = Profbattle.GameBackup.getStates()
-      IO.inspect states
+
+
+      Profbattle.GameBackup.save(socket.assigns[:name], game)
 
       {:ok, %{"join" => name, "game" => game}, socket}
     else
@@ -21,7 +22,7 @@ defmodule ProfbattleWeb.GamesChannel do
   # Channels can be used in a request/response fashion
   # by sending replies to requests from the client
   def handle_in("restart", payload, socket) do
-    game = Game.new
+    game = Game.new()
     Profbattle.GameBackup.save(socket.assigns[:name], game)
     socket = assign(socket, :game, game)
     {:reply, {:ok, %{ "game" => game}}, socket}

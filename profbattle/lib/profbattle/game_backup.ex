@@ -13,7 +13,7 @@ defmodule Profbattle.GameBackup do
 
   def load(name) do
     Agent.get __MODULE__, fn state ->
-      #IO.inspect "test"
+
       Map.get(state, name)
     end
   end

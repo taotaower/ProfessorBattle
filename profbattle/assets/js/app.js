@@ -23,19 +23,37 @@ import socket from "./socket"
 import run_game from "./battle";
 
 function form_init() {
-    $('#game-button').click(() => {
-        let name = document.getElementById('game-input').value;
-    if (name.length > 0) {
-        window.open("/game/" + name, "_self");
-    }
-});
+//     $('#game-button').click(() => {
+//         let name = document.getElementById('game-input').value;
+//     if (name.length > 0) {
+//         window.open("/game/" + name, "_self");
+//     }
+// });
+//
+
+
+    $('#submit-name').on('click',function(){
+
+        var name = $("#game-input").val();
+        var url      = window.location.href;
+
+        if (name){
+            document.location = url + 'game/' + name
+        }
+        else {
+            alert("You have to input a game name")
+        }
+
+
+    });
+
 }
 
 function init() {
     let root = document.getElementById('game');
     if (root) {
         var  name = window.location.href.substr(33);
-        let channel = socket.channel("games:" + name, {});
+        let channel = socket.channel("games:" + window.gameName, {});
         run_game(root, channel);
     }
 
