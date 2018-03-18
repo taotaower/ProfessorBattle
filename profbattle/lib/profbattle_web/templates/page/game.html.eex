@@ -3,6 +3,7 @@
       <h1>Memory Game: <%= @name %></h1>
       <script>
         window.gameName = "<%= @name %>";
+        window.player = "<%= @player %>";
       </script>
       <div id="game">
         <p>React app not loaded...</p>

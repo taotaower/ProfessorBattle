@@ -47,7 +47,7 @@
 
 
            <%= if state.players == 2 do %>
-           <td class="col-4"> <button class="btn btn-success btn-join" value="<%= state.name%>">Watch</button></td>
+           <td class="col-4"> <button class="btn btn-success btn-watch" value="<%= state.name%>">Watch</button></td>
             <% else %>
             <td class="col-4">
               <button class="btn btn-primary btn-join" value="<%= state.name%>">Join</button>

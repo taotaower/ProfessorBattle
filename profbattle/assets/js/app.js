@@ -38,7 +38,7 @@ function form_init() {
         var url      = window.location.href;
 
         if (name){
-            document.location = url + 'game/' + name
+            document.location = url + 'game/' + name + '/' + 'player1'
         }
         else {
             alert("You have to input a game name")
@@ -47,13 +47,29 @@ function form_init() {
 
     });
 
-    $('#game-table').on('click','.btn-join',function () {
-        console.log("clicking game table")
+    var gameTable = $('#game-table');
+
+    gameTable.on('click','.btn-join',function () {
+        console.log("clicking game table");
         var name = $(this).val();
         var url      = window.location.href;
 
         if (name){
-            document.location = url + 'game/' + name
+            document.location = url + 'game/' + name + '/' + 'player2'
+        }
+        else {
+            alert("Something Wrong")
+        }
+
+    });
+
+    gameTable.on('click','.btn-watch',function () {
+        console.log("clicking game table");
+        var name = $(this).val();
+        var url      = window.location.href;
+
+        if (name){
+            document.location = url + 'game/' + name + '/' + 'watcher'
         }
         else {
             alert("Something Wrong")

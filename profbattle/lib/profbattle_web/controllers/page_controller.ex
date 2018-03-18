@@ -14,7 +14,7 @@ defmodule ProfbattleWeb.PageController do
   end
 
   def game(conn, params) do
-    render conn, "game.html", name: params["name"]
+    render conn, "game.html", name: params["name"], player: params["player"]
   end
 
   defp stateConvert(state) do
