@@ -18,4 +18,12 @@ defmodule Profbattle.Game do
   end
 
 
+   def profs() do
+     # define profs' info here
+
+    %{
+
+    }
+  end
+
 end
