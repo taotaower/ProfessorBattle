@@ -34,24 +34,26 @@
 
     <td class="col-6"><%= state.name %></td>
 
-               <%= if state.players == 0 do %>
-                  <td class="col-2">empty</td>
-               <% end %>
-                <%= if state.players == 1 do %>
+               <%= if state.state == 0 do %>
                   <td class="col-2">Waiting</td>
+               <% end %>
+                <%= if state.state == 1 do %>
+                  <td class="col-2">Selecting Professors</td>
                 <% end %>
-                                <%= if state.players == 2 do %>
+                                <%= if state.state == 2 do %>
                                   <td class="col-2">Playing</td>
                                 <% end %>
 
 
 
-           <%= if state.players == 2 do %>
-           <td class="col-4"> <button class="btn btn-success btn-watch" value="<%= state.name%>">Watch</button></td>
+           <%= if state.state == 0 do %>
+
+
+                       <td class="col-4">
+                         <button class="btn btn-primary btn-join" value="<%= state.name%>">Join</button>
+                         </td>
             <% else %>
-            <td class="col-4">
-              <button class="btn btn-primary btn-join" value="<%= state.name%>">Join</button>
-              </td>
+           <td class="col-4"> <button class="btn btn-success btn-watch" value="<%= state.name%>">Watch</button></td>
             <% end %>
 
 

@@ -12,7 +12,7 @@ defmodule ProfbattleWeb.GamesChannel do
 
       if game do
 
-        if length(game) == 1 do
+        if game.gameState == 0 do
           game = Game.addPlayer(game)
         end
 

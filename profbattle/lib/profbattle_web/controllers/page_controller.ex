@@ -17,15 +17,18 @@ defmodule ProfbattleWeb.PageController do
     render conn, "game.html", name: params["name"], player: params["player"]
   end
 
-  defp stateConvert(state) do
-    IO.inspect state
-    state = Tuple.to_list(state)
+  defp stateConvert(game) do
+    IO.inspect game
+    state = Tuple.to_list(game)
     name = List.first(state)  # get name
-    players = length(List.last(state)) # get number of players
+    state = List.last(state) # get number of players
+
+    IO.inspect "state"
+    IO.inspect state
 
     %{
     name: name,
-    players: players
+      state: state.gameState
     }
 
   end

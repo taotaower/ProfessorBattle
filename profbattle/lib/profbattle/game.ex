@@ -14,26 +14,42 @@ defmodule Profbattle.Game do
     end
 
 
-    def select(game, professor) do
-      firstPlayer = game.firstPlayer
-      playerOneTeam = game.player1
-      playerTwoTeam = game.player2
+    def addPlayer(game) do
+      #[%{player1: %{}},%{player2: %{}}]
 
-      cond do
-        length(playerOneTeam) > length(playerTwoTeam) ->
-          addplayer(game, 2, professor)
-        length(playerOneTeam) < length(playerTwoTeam) ->
-          addplayer(game, 1, professor)
-        length(playerOneTeam) == length(playerTwoTeam) ->
-          if firstplayer == 1 do
-            addplayer(game, 1, professor)
-            else
-            addplayer(game, 2, professor)
-          end
-      end
+
+      %{
+        gameState: 1,
+        round: 0,
+        firstPlayer: 1, # will generate randomly
+        player1: [],
+        player2: [],
+        player1Action: "",
+        player2Action: ""
+      }
     end
 
-    def addplayer(game, player, professor) do
+
+#    def select(game, professor) do
+#      firstPlayer = game.firstPlayer
+#      playerOneTeam = game.player1
+#      playerTwoTeam = game.player2
+#
+#      cond do
+#        length(playerOneTeam) > length(playerTwoTeam) ->
+#          addplayer(game, 2, professor)
+#        length(playerOneTeam) < length(playerTwoTeam) ->
+#          addplayer(game, 1, professor)
+#        length(playerOneTeam) == length(playerTwoTeam) ->
+#          if firstplayer == 1 do
+#            addplayer(game, 1, professor)
+#            else
+#            addplayer(game, 2, professor)
+#          end
+#      end
+#    end
+
+    def addProfessor(game, player, professor) do
       gameState = game.gameState
       round = game.round
 
@@ -87,78 +103,72 @@ defmodule Profbattle.Game do
         }
       end
 
-      if player == 2 && game.player1Action == "" do
-        %{
-          gameState: game.gameState,
-          round: game.round,
-          firstPlayer: game.firstPlayer,
-          player1: game.player1,
-          player2: game.player2,
-          player1Action: game.player1Action
-          player2Aaction: "attack"
-        }
-      end
+#      if player == 2 && game.player1Action == "" do
+#        %{
+#          gameState: game.gameState,
+#          round: game.round,
+#          firstPlayer: game.firstPlayer,
+#          player1: game.player1,
+#          player2: game.player2,
+#          player1Action: game.player1Action
+#          player2Aaction: "attack"
+#        }
+#      end
 
     end
 
-    def swap(game, player, professor) do
-      if player == 1 do
-        professorArray = game.player1
-        first = List.first(professorArray)
-        professorArray = List.delete(professorArray, first)
-        second = List.first(professorArray)
-        third = List.last(professorArray)
-      else
-        professorArray = game.player2
-        first = List.first(professorArray)
-        professorArray = List.delete(professorArray, first)
-        second = List.first(professorArray)
-        third = List.last(professorArray)
-      end
-
-      if professor == 2 do
-        professorArray = [second, first, third]
-      else
-        professorArray = [third, second, first]
-      end
-
-      if player == 1 do
-        %{
-          gameState: game.gameState,
-          round: game.round + 1,
-          firstPlayer: game.firstPlayer,
-          player1: professorArray,
-          player2: game.player2,
-          player1Action: "swap",
-          player2Action: game.player2Action
-        }
-      else
-        %{
-          gameState: game.gameState,
-          round: game.round + 1,
-          firstPlayer: game.firstPlayer,
-          player1: game.player1,
-          player2: professorArray,
-          player1Action: game.player1Action,
-          player2Action: "swap"
-        }
-    end
+def swap(game, player, professor) do
+  if player == 1 do
+    professorArray = game.player1
+    first = List.first(professorArray)
+    professorArray = List.delete(professorArray, first)
+    second = List.first(professorArray)
+    third = List.last(professorArray)
+  else
+    professorArray = game.player2
+    first = List.first(professorArray)
+    professorArray = List.delete(professorArray, first)
+    second = List.first(professorArray)
+    third = List.last(professorArray)
   end
 
-
-
-   def addPlayer(game) do
-
-     [%{player1: %{}},%{player2: %{}}]
+  if professor == 2 do
+    professorArray = [second, first, third]
+  else
+    professorArray = [third, second, first]
   end
 
+  if player == 1 do
+    %{
+      gameState: game.gameState,
+      round: game.round + 1,
+      firstPlayer: game.firstPlayer,
+      player1: professorArray,
+      player2: game.player2,
+      player1Action: "swap",
+      player2Action: game.player2Action
+    }
+  else
+    %{
+      gameState: game.gameState,
+      round: game.round + 1,
+      firstPlayer: game.firstPlayer,
+      player1: game.player1,
+      player2: professorArray,
+      player1Action: game.player1Action,
+      player2Action: "swap"
+    }
+
+
+  end
+end
 
    def profs() do
      # define profs' info here
+    %{}
+    end
 
-    %{
 
-    }
+
   end
 
-end
