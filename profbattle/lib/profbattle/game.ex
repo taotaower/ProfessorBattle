@@ -11,6 +11,12 @@ defmodule Profbattle.Game do
 
     end
 
+    %{
+
+    
+
+
+    }
 
    def addPlayer(game) do
 
