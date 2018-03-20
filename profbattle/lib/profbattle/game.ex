@@ -141,10 +141,20 @@ defmodule Profbattle.Game do
 
 
 
-   def addPlayer(game) do
+def addPlayer(game) do
+  #[%{player1: %{}},%{player2: %{}}]
 
-     [%{player1: %{}},%{player2: %{}}]
-  end
+
+  %{
+    gameState: 1,
+    round: 0,
+    firstPlayer: 1, # will generate randomly
+    player1: [],
+    player2: [],
+    player1Action: "",
+    player2Action: ""
+  }
+end
 
 
    def profs() do
