@@ -4,9 +4,9 @@ defmodule Profbattle.Game do
     # new will randomly create 3 profs to player1
       %{
         gameState: 0,
-        round: 0,
-        firstPlayer: 1,
-        player1: [],
+        round: 0, #delete maybe
+        selectingPlayer: 1,
+        player1: [], #{prof1: #{prof: 1, hp:100, sp: 100}}
         player2: [],
         player1Action: "",
         player2Action: ""
@@ -15,25 +15,19 @@ defmodule Profbattle.Game do
 
 
     def select(game, professor) do
-      firstPlayer = game.firstPlayer
+      selectingPlayer = game.selectingPlayer
       playerOneTeam = game.player1
       playerTwoTeam = game.player2
 
-      cond do
-        length(playerOneTeam) > length(playerTwoTeam) ->
-          addplayer(game, 2, professor)
-        length(playerOneTeam) < length(playerTwoTeam) ->
-          addplayer(game, 1, professor)
-        length(playerOneTeam) == length(playerTwoTeam) ->
-          if firstplayer == 1 do
-            addplayer(game, 1, professor)
-            else
-            addplayer(game, 2, professor)
-          end
+      if selectingPlayer == 1 do
+        addProfessor(game, 1, professor)
+        else
+        addProfessor(game, 2, professor)
       end
+
     end
 
-    def addplayer(game, player, professor) do
+    def addProfessor(game, player, professor) do
       gameState = game.gameState
       round = game.round
 
@@ -48,7 +42,7 @@ defmodule Profbattle.Game do
         %{
           gameState: gameState,
           round: round,
-          firstPlayer: game.firstPlayer,
+          selectingPlayer: 2,
           player1: game.player1 ++ [[professor, 100, 0]],
           player2: game.player2,
           player1Action: game.player1Action,
@@ -58,7 +52,7 @@ defmodule Profbattle.Game do
         %{
           gameState: gameState,
           round: round,
-          firstPlayer: game.firstPlayer,
+          selectingPlayer: 1,
           player1: game.player1,
           player2: game.player2 ++ [[professor, 100, 0]],
           player1Action: game.player1Action,
@@ -68,18 +62,18 @@ defmodule Profbattle.Game do
     end
 
     def attack(game, player) do
-      clinger = [hp: 3.63, attack: 3.95, defense: 3.95, speed: 3.61, special: 4.03]
-      tuck = [hp: 4.37, attack: 4.57, defense: 4.53, speed: 4.23, special: 4.42]
-      platt = [hp: 3.93, attack: 4.17, defense: 4.17, speed: 4.25, special: 4.63]
-      young = [hp: 4.78, attack: 4.58, defense: 4.84, speed: 4.83, special: 4.87]
-      weintraub = [hp: 3.90, attack: 3.25, defense: 4.27, speed: 3.87, special: 4.23]
-      derbinsky = [hp: 4.73, attack: 4.10, defense: 4.73, speed: 4.58, special: 4.70]
+      clinger = [hp: 3.63, attack: 3.95, defense: 3.95, speed: 3.61, special: 4.03] #1
+      tuck = [hp: 4.37, attack: 4.57, defense: 4.53, speed: 4.23, special: 4.42] #2
+      platt = [hp: 3.93, attack: 4.17, defense: 4.17, speed: 4.25, special: 4.63] #3
+      young = [hp: 4.78, attack: 4.58, defense: 4.84, speed: 4.83, special: 4.87] #4
+      weintraub = [hp: 3.90, attack: 3.25, defense: 4.27, speed: 3.87, special: 4.23] #5
+      derbinsky = [hp: 4.73, attack: 4.10, defense: 4.73, speed: 4.58, special: 4.70] #6
 
       if player == 1 && game.player2Action == "" do
         %{
           gameState: game.gameState,
           round: game.round,
-          firstPlayer: game.firstPlayer,
+          selectingPlayer: game.selectingPlayer,
           player1: game.player1,
           player2: game.player2,
           player1Action: "attack",
@@ -91,7 +85,7 @@ defmodule Profbattle.Game do
         %{
           gameState: game.gameState,
           round: game.round,
-          firstPlayer: game.firstPlayer,
+          selectingPlayer: game.selectingPlayer,
           player1: game.player1,
           player2: game.player2,
           player1Action: game.player1Action
@@ -126,7 +120,7 @@ defmodule Profbattle.Game do
         %{
           gameState: game.gameState,
           round: game.round + 1,
-          firstPlayer: game.firstPlayer,
+          selectingPlayer: game.selectingPlayer,
           player1: professorArray,
           player2: game.player2,
           player1Action: "swap",
@@ -136,7 +130,7 @@ defmodule Profbattle.Game do
         %{
           gameState: game.gameState,
           round: game.round + 1,
-          firstPlayer: game.firstPlayer,
+          selectingPlayer: game.selectingPlayer,
           player1: game.player1,
           player2: professorArray,
           player1Action: game.player1Action,
