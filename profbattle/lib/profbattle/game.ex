@@ -148,7 +148,7 @@ def addPlayer(game) do
   %{
     gameState: 1,
     round: 0,
-    firstPlayer: 1, # will generate randomly
+    selectingPlayer: 1, # will generate randomly
     player1: [],
     player2: [],
     player1Action: "",
