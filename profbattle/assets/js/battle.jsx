@@ -115,6 +115,7 @@ class Prof extends React.Component {
         }
 
 
+
         return(
             <div className={"col-2"}>
                 <div><b>{this.prof.name}</b></div>
@@ -187,11 +188,7 @@ class Battle extends React.Component {
         }
         else if (this.state.gameState == 1) {
             // Professor selection screen
-            let selectingCon = <span>Please wait for another player to choose his/her Professor</span>;
-            if (this.state.selectingPlayer === window.player){
-                selectingCon = <span>Please select a Professor for yourself</span>;
-            }
-            console.log(this.state.selectingPlayer);
+            let selectingCon = <span>{this.state.selectingPlayer} is choosing his/her Professor</span>;
 
             return (
                 <div>
