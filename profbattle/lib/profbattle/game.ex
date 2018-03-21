@@ -144,11 +144,13 @@ defmodule Profbattle.Game do
   def addPlayer(game) do
     #[%{player1: %{}},%{player2: %{}}]
 
+    selectingPlayer = initSelectingPlayer()
+
 
     %{
       gameState: 1,
       round: 0,
-      selectingPlayer: 1, # will generate randomly
+      selectingPlayer: selectingPlayer, # will generate randomly
       player1: [],
       player2: [],
       player1Action: "",
@@ -157,17 +159,74 @@ defmodule Profbattle.Game do
     }
   end
 
+  def selectProf(game,player,prof) do
+    selectingPlayer = game.selectingPlayer
+    playerOneTeam = game.player1
+    playerTwoTeam = game.player2
+    profNumPlayer1 = length(playerOneTeam)
+    profNumPlayer2 = length(playerTwoTeam)
+    nextPlayer = ""
+    gameState = game.gameState
+    gameProfs = game.profs
+    if selectingPlayer == "player1" do
+
+       playerOneTeam = playerOneTeam ++ [%{id: prof, hp: 100, anger: 0, status: "active", seq: (profNumPlayer1+1), special: false}]
+       nextPlayer = "player2"
+    else
+
+      playerTwoTeam = playerTwoTeam ++ [%{id: prof, hp: 100, anger: 0, status: "active", seq: (profNumPlayer2+1), special: false}]
+      nextPlayer = "player1"
+    end
+
+    updateProf = Map.put(Enum.fetch!(gameProfs,prof),:selected, true)
+    gameProfs = List.replace_at(gameProfs, prof, updateProf)
+
+    if (profNumPlayer1 + profNumPlayer2 + 1) == 6 do
+      %{
+        gameState: 2,
+        round: 0,
+        selectingPlayer: nextPlayer,
+        player1: playerOneTeam,
+        player2: playerTwoTeam,
+        player1Action: "",
+        player2Action: "",
+      }
+
+      else
+
+      %{
+        gameState: 1,
+        round: 0,
+        selectingPlayer: nextPlayer,
+        player1: playerOneTeam,
+        player2: playerTwoTeam,
+        player1Action: "",
+        player2Action: "",
+        profs: gameProfs
+      }
+    end
+
+
+
+
+  end
+
 
   def profs() do
     # define profs' info here
     [
-      %{id: 1, name: "clinger", hp: 3.63, attack: 3.95, defense: 3.95, speed: 3.61, special: 4.03, pic: ""},
-      %{id: 2, name: "tuck", hp: 4.37, attack: 4.57, defense: 4.53, speed: 4.23, special: 4.42, pic: ""},
-      %{id: 3, name: "platt", hp: 3.93, attack: 4.17, defense: 4.17, speed: 4.25, special: 4.63, pic: ""},
-      %{id: 4, name: "young", hp: 4.78, attack: 4.58, defense: 4.84, speed: 4.83, special: 4.87, pic: ""},
-      %{id: 5, name: "weintraub", hp: 3.90, attack: 3.25, defense: 4.27, speed: 3.87, special: 4.23, pic: ""},
-      %{id: 6, name: "derbinsky", hp: 4.73, attack: 4.10, defense: 4.73, speed: 4.58, special: 4.70, pic: ""},
+      %{id: 0, name: "clinger", hp: 3.63, attack: 4.05, defense: 3.95, speed: 3.61, special: 5.00, pic: "", selected: false},
+      %{id: 1, name: "tuck", hp: 4.37, attack: 3.43, defense: 4.53, speed: 4.23, special: 4.07, pic: "",selected: false},
+      %{id: 2, name: "platt", hp: 3.93, attack: 3.83, defense: 4.17, speed: 4.25, special: 3.57, pic: "",selected: false},
+      %{id: 3, name: "young", hp: 4.78, attack: 3.42, defense: 4.84, speed: 4.83, special: 3.00, pic: "",selected: false},
+      %{id: 4, name: "weintraub", hp: 3.90, attack: 4.75, defense: 4.27, speed: 3.87, special: 4.76, pic: "",selected: false},
+      %{id: 5, name: "derbinsky", hp: 4.73, attack: 3.90, defense: 4.73, speed: 4.58, special: 3.40, pic: "",selected: false},
     ]
+  end
+
+  def initSelectingPlayer() do
+    Enum.shuffle(["player1","player2"])
+          |>List.first()
   end
 
 end

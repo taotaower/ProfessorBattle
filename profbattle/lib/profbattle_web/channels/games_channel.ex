@@ -60,4 +60,13 @@ defmodule ProfbattleWeb.GamesChannel do
   defp authorized?(_payload) do
     true
   end
+
+
+  def handle_in("selectProf", %{"player" => n, "professor" => p}, socket) do
+    game = Game.selectProf(socket.assigns[:game],n ,p)
+    Profbattle.GameBackup.save(socket.assigns[:name], game)
+    socket = assign(socket, :game, game)
+    {:reply, {:ok, %{ "game" => game}}, socket}
+  end
+
 end
