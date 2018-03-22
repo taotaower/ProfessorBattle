@@ -149,6 +149,7 @@ class Battle extends React.Component {
             .receive("error", resp => {
                 console.log("Unable to join", resp)
             });
+        this.channel.on("update", this.gotView.bind(this));
         this.selectProf = this.selectProf.bind(this);
         console.log("get reload for Battle")
     }

@@ -14,6 +14,7 @@ defmodule ProfbattleWeb.GamesChannel do
 
         if game.gameState == 0 do
           game = Game.addPlayer(game)
+          #broadcast! socket, "update", %{game: game}
         end
 
         else
@@ -27,6 +28,7 @@ defmodule ProfbattleWeb.GamesChannel do
       Profbattle.GameBackup.save(socket.assigns[:name], game)
 
       {:ok, %{"join" => name, "game" => game}, socket}
+      #broadcast! socket, "ok", %{"join" => name, "game" => game}
     else
       {:error, %{reason: "unauthorized"}}
     end
@@ -38,14 +40,18 @@ defmodule ProfbattleWeb.GamesChannel do
     game = Game.select(socket.assigns[:game], p)
     Profbattle.GameBackup.save(socket.assigns[:name], game)
     socket = assign(socket, :game, game)
-    {:reply, {:ok, %{ "game" => game}}, socket}
+    broadcast! socket, "update", %{game: game}
+    {:noreply, socket}
+    #{:reply, {:ok, %{ "game" => game}}, socket}
   end
 
   def handle_in("attack", %{"player" => n}, socket) do
     game = Game.attack(socket.assigns[:game], n)
     Profbattle.GameBackup.save(socket.assigns[:name], game)
     socket = assign(socket, :game, game)
-    {:reply, {:ok, %{ "game" =>  game}}, socket}
+    broadcast! socket, "update", %{game: game}
+    {:noreply, socket}
+    #{:reply, {:ok, %{ "game" =>  game}}, socket}
   end
 
   # professor is array location
@@ -53,7 +59,9 @@ defmodule ProfbattleWeb.GamesChannel do
     game = Game.swap(socket.assigns[:game], n, p)
     Profbattle.GameBackup.save(socket.assigns[:name], game)
     socket = assign(socket, :game, game)
-    {:reply, {:ok, %{ "game" => game}}, socket}
+    broadcast! socket, "update", %{game: game}
+    {:noreply, socket}
+    #{:reply, {:ok, %{ "game" => game}}, socket}
   end
 
   # Add authorization logic here as required.
@@ -66,7 +74,9 @@ defmodule ProfbattleWeb.GamesChannel do
     game = Game.selectProf(socket.assigns[:game],n ,p)
     Profbattle.GameBackup.save(socket.assigns[:name], game)
     socket = assign(socket, :game, game)
-    {:reply, {:ok, %{ "game" => game}}, socket}
+    broadcast! socket, "update", %{game: game}
+    {:noreply, socket}
+    #{:reply, {:ok, %{ "game" => game}}, socket}
   end
 
 end
