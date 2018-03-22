@@ -258,7 +258,6 @@ defmodule Profbattle.Game do
        playerOneTeam = playerOneTeam ++ [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: (profNumPlayer1+1), special: false}]
        profNumPlayer1 = profNumPlayer1 + 1
     else
-
       playerTwoTeam = playerTwoTeam ++ [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: (profNumPlayer2+1), special: false}]
       profNumPlayer2 = profNumPlayer2 + 1
     end
