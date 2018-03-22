@@ -5,61 +5,64 @@ defmodule Profbattle.Game do
     %{
       gameState: 0,
       round: 0, #delete maybe
-      selectingPlayer: 1,
+      playerTurn: "",
       player1: [], #{prof1: #{prof: 1, hp:100, sp: 100}}
       player2: [],
       player1Action: "",
-      player2Action: ""
+      player2Action: "",
+      profNumPlayer1: 0,
+      profNumPlayer2: 0,
+
     }
   end
 
 
-  def select(game, professor) do
-    selectingPlayer = game.selectingPlayer
-    playerOneTeam = game.player1
-    playerTwoTeam = game.player2
-
-    if selectingPlayer == 1 do
-      addProfessor(game, 1, professor)
-    else
-      addProfessor(game, 2, professor)
-    end
-
-  end
-
-  def addProfessor(game, player, professor) do
-    gameState = game.gameState
-    round = game.round
-
-    if round == 6 do
-      round = 0
-      gameState = 2
-    else
-      round = round + 1
-    end
-
-    if player == 1 do
-      %{
-        gameState: gameState,
-        round: round,
-        selectingPlayer: 2,
-        player1: game.player1 ++ [[professor, 100, 0]],
-        player2: game.player2,
-        player1Action: game.player1Action,
-        player2Action: game.player2Action
-      }
-    else
-      %{
-        gameState: gameState,
-        round: round,
-        selectingPlayer: 1,
-        player1: game.player1,
-        player2: game.player2 ++ [[professor, 100, 0]],
-        player1Action: game.player1Action,
-        player2Aaction: game.player2Action
-      }
-    end
-  end
+#  def select(game, professor) do
+#    playerTurn = game.playerTurn
+#    playerOneTeam = game.player1
+#    playerTwoTeam = game.player2
+#
+#    if playerTurn == 1 do
+#      addProfessor(game, 1, professor)
+#    else
+#      addProfessor(game, 2, professor)
+#    end
+#
+#  end
+#
+#  def addProfessor(game, player, professor) do
+#    gameState = game.gameState
+#    round = game.round
+#
+#    if round == 6 do
+#      round = 0
+#      gameState = 2
+#    else
+#      round = round + 1
+#    end
+#
+#    if player == 1 do
+#      %{
+#        gameState: gameState,
+#        round: round,
+#        playerTurn: 2,
+#        player1: game.player1 ++ [[professor, 100, 0]],
+#        player2: game.player2,
+#        player1Action: game.player1Action,
+#        player2Action: game.player2Action
+#      }
+#    else
+#      %{
+#        gameState: gameState,
+#        round: round,
+#        playerTurn: 1,
+#        player1: game.player1,
+#        player2: game.player2 ++ [[professor, 100, 0]],
+#        player1Action: game.player1Action,
+#        player2Aaction: game.player2Action
+#      }
+#    end
+#  end
 
   #    def attack(game, player) do
   #      clinger = [hp: 3.63, attack: 3.95, defense: 3.95, speed: 3.61, special: 4.03] #1
@@ -73,7 +76,7 @@ defmodule Profbattle.Game do
   #        %{
   #          gameState: game.gameState,
   #          round: game.round,
-  #          selectingPlayer: game.selectingPlayer,
+  #          playerTurn: game.playerTurn,
   #          player1: game.player1,
   #          player2: game.player2,
   #          player1Action: "attack",
@@ -85,7 +88,7 @@ defmodule Profbattle.Game do
   #        %{
   #          gameState: game.gameState,
   #          round: game.round,
-  #          selectingPlayer: game.selectingPlayer,
+  #          playerTurn: game.playerTurn,
   #          player1: game.player1,
   #          player2: game.player2,
   #          player1Action: game.player1Action
@@ -94,99 +97,79 @@ defmodule Profbattle.Game do
   #      end
   #
   #    end
+#
+#  def swap(game, player, professor) do
+#    if player == 1 do
+#      professorArray = game.player1
+#      first = List.first(professorArray)
+#      professorArray = List.delete(professorArray, first)
+#      second = List.first(professorArray)
+#      third = List.last(professorArray)
+#    else
+#      professorArray = game.player2
+#      first = List.first(professorArray)
+#      professorArray = List.delete(professorArray, first)
+#      second = List.first(professorArray)
+#      third = List.last(professorArray)
+#    end
+#
+#    if professor == 2 do
+#      professorArray = [second, first, third]
+#    else
+#      professorArray = [third, second, first]
+#    end
+#
+#    if player == 1 do
+#      %{
+#        gameState: game.gameState,
+#        round: game.round + 1,
+#        playerTurn: game.playerTurn,
+#        player1: professorArray,
+#        player2: game.player2,
+#        player1Action: "swap",
+#        player2Action: game.player2Action
+#      }
+#    else
+#      %{
+#        gameState: game.gameState,
+#        round: game.round + 1,
+#        playerTurn: game.playerTurn,
+#        player1: game.player1,
+#        player2: professorArray,
+#        player1Action: game.player1Action,
+#        player2Action: "swap"
+#      }
+#    end
+#  end
 
-  def swap(game, player, professor) do
-    if player == 1 do
-      professorArray = game.player1
-      first = List.first(professorArray)
-      professorArray = List.delete(professorArray, first)
-      second = List.first(professorArray)
-      third = List.last(professorArray)
-    else
-      professorArray = game.player2
-      first = List.first(professorArray)
-      professorArray = List.delete(professorArray, first)
-      second = List.first(professorArray)
-      third = List.last(professorArray)
-    end
-
-    if professor == 2 do
-      professorArray = [second, first, third]
-    else
-      professorArray = [third, second, first]
-    end
-
-    if player == 1 do
-      %{
-        gameState: game.gameState,
-        round: game.round + 1,
-        selectingPlayer: game.selectingPlayer,
-        player1: professorArray,
-        player2: game.player2,
-        player1Action: "swap",
-        player2Action: game.player2Action
-      }
-    else
-      %{
-        gameState: game.gameState,
-        round: game.round + 1,
-        selectingPlayer: game.selectingPlayer,
-        player1: game.player1,
-        player2: professorArray,
-        player1Action: game.player1Action,
-        player2Action: "swap"
-      }
-    end
-  end
-
-
-
-  def addPlayer(game) do
-    #[%{player1: %{}},%{player2: %{}}]
-
-    selectingPlayer = initSelectingPlayer()
+# defend prof will get angry
 
 
-    %{
-      gameState: 1,
-      round: 0,
-      selectingPlayer: selectingPlayer, # will generate randomly
-      player1: [],
-      player2: [],
-      player1Action: "",
-      player2Action: "",
-      profs: profs()
-    }
-  end
 
-  def selectProf(game,player,prof) do
-    selectingPlayer = game.selectingPlayer
+  def attack(game) do
+    playerTurn = game.playerTurn
     playerOneTeam = game.player1
     playerTwoTeam = game.player2
-    profNumPlayer1 = length(playerOneTeam)
-    profNumPlayer2 = length(playerTwoTeam)
-    nextPlayer = ""
-    gameState = game.gameState
-    gameProfs = game.profs
-    if selectingPlayer == "player1" do
+    if playerTurn == "player1" do
+      attackProf = List.first(playerOneTeam)
+      defenseProf = List.first(playerTwoTeam)
+      hp = calAttack(attackProf,defenseProf)
 
-       playerOneTeam = playerOneTeam ++ [%{id: prof, hp: 100, anger: 0, status: "active", seq: (profNumPlayer1+1), special: false}]
-       nextPlayer = "player2"
-    else
+      if hp <= 0 do
+        defenseProf = Map.put(defenseProf,:status, "offline")
+        defenseProf = Map.put(defenseProf,:hp, 0)
+        swap(game,defenseProf)
+      else
 
-      playerTwoTeam = playerTwoTeam ++ [%{id: prof, hp: 100, anger: 0, status: "active", seq: (profNumPlayer2+1), special: false}]
-      nextPlayer = "player1"
-    end
 
-    updateProf = Map.put(Enum.fetch!(gameProfs,prof),:selected, true)
-    gameProfs = List.replace_at(gameProfs, prof, updateProf)
+        defenseProf = Map.put(defenseProf,:hp, hp)
+      end
 
-    if (profNumPlayer1 + profNumPlayer2 + 1) == 6 do
       %{
-        gameState: 2,
-        round: 0,
-        selectingPlayer: nextPlayer,
-        player1: playerOneTeam,
+        gameState: game.gameState,
+        round: (game.round + 1),
+        playerTurn: nextPlayer(playerTurn),
+        player1: game.player1,
         player2: playerTwoTeam,
         player1Action: "",
         player2Action: "",
@@ -194,22 +177,126 @@ defmodule Profbattle.Game do
 
       else
 
+      attackProf = List.first(game.player2)
+      defenseProf = List.first(game.player1)
+
+    end
+
+  end
+
+  def getAngry(defenseProf) do
+    50
+  end
+
+  def calAttack(attackProf,defenseProf) do
+
+    attack = Enum.fetch!(profs(),attackProf.id).attack
+
+    defenseProfDate = Enum.fetch!(profs(),defenseProf.id)
+    defense = defenseProfDate.defense
+    hp = defenseProf.hp
+
+    50
+
+  end
+
+
+  # when call swap current prof will go to the last position, selected prof should go to first
+
+  def swap(game,prof) do
+
+
+  end
+
+
+  def nextPlayer(player) do
+    if player == "player1" do
+      "player2"
+    else
+      "player1"
+    end
+
+  end
+
+
+  def getHp(prof) do
+    hp = Enum.fetch!(profs(),prof).hp
+
+    100
+
+  end
+
+
+  def addPlayer(game) do
+
+
+    playerTurn = initplayerTurn()
+    %{
+      gameState: 1,
+      round: 0,
+      playerTurn: playerTurn, # will generate randomly
+      player1: [],
+      player2: [],
+      player1Action: "",
+      player2Action: "",
+      profs: profs(),
+      profNumPlayer1: 0,
+      profNumPlayer2: 0,
+
+    }
+  end
+
+  def selectProf(game,player,prof) do
+    playerTurn = game.playerTurn
+    playerOneTeam = game.player1
+    playerTwoTeam = game.player2
+    profNumPlayer1 = game.profNumPlayer1
+    profNumPlayer2 = game.profNumPlayer2
+    gameState = game.gameState
+    gameProfs = game.profs
+    if playerTurn == "player1" do
+       playerOneTeam = playerOneTeam ++ [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: (profNumPlayer1+1), special: false}]
+       profNumPlayer1 = profNumPlayer1 + 1
+    else
+
+      playerTwoTeam = playerTwoTeam ++ [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: (profNumPlayer2+1), special: false}]
+      profNumPlayer2 = profNumPlayer2 + 1
+    end
+
+    updateProf = Map.put(Enum.fetch!(gameProfs,prof),:selected, true)
+    gameProfs = List.replace_at(gameProfs, prof, updateProf)
+
+    if (profNumPlayer1 + profNumPlayer2) == 6 do
       %{
-        gameState: 1,
+        gameState: 2,
         round: 0,
-        selectingPlayer: nextPlayer,
+        playerTurn: nextPlayer(playerTurn),
         player1: playerOneTeam,
         player2: playerTwoTeam,
         player1Action: "",
         player2Action: "",
-        profs: gameProfs
+        profNumPlayer1: profNumPlayer1,
+        profNumPlayer2: profNumPlayer2,
+      }
+
+      else
+
+      %{
+        gameState: 1,
+        round: 0,
+        playerTurn: nextPlayer(playerTurn),
+        player1: playerOneTeam,
+        player2: playerTwoTeam,
+        player1Action: "",
+        player2Action: "",
+        profs: gameProfs,
+        profNumPlayer1: profNumPlayer1,
+        profNumPlayer2: profNumPlayer2,
       }
     end
-
-
-
-
   end
+
+
 
 
   def profs() do
@@ -224,9 +311,107 @@ defmodule Profbattle.Game do
     ]
   end
 
-  def initSelectingPlayer() do
+  def initplayerTurn() do
     Enum.shuffle(["player1","player2"])
           |>List.first()
   end
 
 end
+
+
+
+
+#
+#
+#
+#def attackAttack(p1,p2) do
+#
+#end
+#
+#def attackSwap(p1,p2,attacker) do
+#
+#end
+#
+#def swapSwap(p1,p2) do
+#
+#end
+#
+#
+#def playerAction(game ,player, action) do
+#  if player == "player1" do
+#    if game.player2Action == "" do
+#
+#      %{
+#        gameState: game.gameState,
+#        round: game.round,
+#        player1: playerOneTeam,
+#        player2: playerTwoTeam,
+#        player1Action: action,
+#        player2Action: game.player2Action,
+#      }
+#    else
+#
+#      if action == "attack" do
+#        if game.player2Action == "attack" do
+#
+#          attackAttack(game.player1,game.player2)
+#        else
+#          attackSwap(game.player1,game.player2, "player1")
+#
+#        end
+#      else
+#        if game.player2Action == "attack" do
+#
+#          attackSwap(game.player1,game.player2, "player2")
+#        else
+#          swapSwap(game.player1,game.player2)
+#
+#        end
+#
+#      end
+#
+#
+#    end
+#
+#  else
+#    if game.player1Action == "" do
+#
+#      %{
+#        gameState: game.gameState,
+#        round: game.round,
+#        player1: playerOneTeam,
+#        player2: playerTwoTeam,
+#        player1Action: game.player1Action,
+#        player2Action: action,
+#      }
+#    else
+#
+#      if action == "attack" do
+#        if game.player1Action == "attack" do
+#
+#          attackAttack(game.player1,game.player2)
+#        else
+#          attackSwap()
+#
+#        end
+#      else
+#        if game.player1Action == "attack" do
+#
+#          attackSwap()
+#        else
+#          swapSwap(game.player1,game.player2)
+#
+#        end
+#
+#      end
+#
+#
+#    end
+#
+#
+#
+#  end
+#
+#
+#
+#end

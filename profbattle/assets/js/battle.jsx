@@ -71,7 +71,7 @@ class SelectProf extends React.Component {
         this.channel = props.channel;
         this.profs = props.profs;
         this.selectProf = props.selectProf;
-        this.selectingPlayer = props.selectingPlayer;
+        this.playerTurn = props.playerTurn;
         this.renderProfs = this.renderProfs.bind(this);
     }
     renderProfs(profs) {
@@ -81,7 +81,7 @@ class SelectProf extends React.Component {
                     prof={prof}
                   //    channel = {this.channel}
                       selectProf={this.selectProf}
-                      selectingPlayer = {this.selectingPlayer}/>
+                      playerTurn = {this.playerTurn}/>
             );
         });
     }
@@ -100,7 +100,7 @@ class Prof extends React.Component {
         this.prof = props.prof;
         this.selectProf = props.selectProf.bind(this);
     //    this.channel = props.channel;
-        this.selectingPlayer = props.selectingPlayer;
+        this.playerTurn = props.playerTurn;
     }
 
 
@@ -108,7 +108,7 @@ class Prof extends React.Component {
 
         let btn = <button type="button" className={"btn btn-primary"} onClick={() => this.selectProf(this.prof.id)}>Select</button>;
 
-        if (this.prof.selected || this.selectingPlayer !== window.player){
+        if (this.prof.selected || this.playerTurn !== window.player){
 
             btn = <button type="button" className={"btn btn-secondary"} disabled>Select</button>;
 
@@ -156,6 +156,9 @@ class Battle extends React.Component {
 
 
 
+
+
+
     gotView(view) {
 
         console.log("updating main view",view.game);
@@ -188,16 +191,16 @@ class Battle extends React.Component {
         }
         else if (this.state.gameState == 1) {
             // Professor selection screen
-            let selectingCon = <span>{this.state.selectingPlayer} is choosing his/her Professor</span>;
+            let selectingCon = <span>{this.state.playerTurn} is choosing his/her Professor</span>;
 
             return (
                 <div>
                     {selectingCon}
-                    <SelectProf key = {this.state.selectingPlayer}
+                    <SelectProf key = {this.state.playerTurn}
                                 profs={this.state.profs}
                                 channel = {this.channel}
                                 selectProf = {this.selectProf}
-                                selectingPlayer = {this.state.selectingPlayer}/>
+                                playerTurn = {this.state.playerTurn}/>
                 </div>
             )
 
