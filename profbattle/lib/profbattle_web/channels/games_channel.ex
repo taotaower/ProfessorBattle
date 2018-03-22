@@ -73,7 +73,8 @@ defmodule ProfbattleWeb.GamesChannel do
   def handle_in("selectProf", %{"player" => n, "professor" => p}, socket) do
     game = Game.selectProf(socket.assigns[:game],n ,p)
     Profbattle.GameBackup.save(socket.assigns[:name], game)
-    socket = assign(socket, :game, game)
+    socket = socket
+             |> assign(:game, game)
     broadcast! socket, "update", %{game: game}
     {:noreply, socket}
     #{:reply, {:ok, %{ "game" => game}}, socket}

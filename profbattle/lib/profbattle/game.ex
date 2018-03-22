@@ -12,6 +12,8 @@ defmodule Profbattle.Game do
       player2Action: "",
       profNumPlayer1: 0,
       profNumPlayer2: 0,
+      phrase: "",
+      msg: "",
 
     }
   end
@@ -144,21 +146,34 @@ defmodule Profbattle.Game do
 
 # defend prof will get angry
 
+  def deadSwap(profNumPlayer2) do
+
+  end
 
 
-  def attack(game) do
+  def attackAction(game) do
     playerTurn = game.playerTurn
     playerOneTeam = game.player1
     playerTwoTeam = game.player2
+    profNumPlayer1 = game.profNumPlayer1
+    profNumPlayer2 = game.profNumPlayer2
+    msg = ""
     if playerTurn == "player1" do
       attackProf = List.first(playerOneTeam)
       defenseProf = List.first(playerTwoTeam)
       hp = calAttack(attackProf,defenseProf)
 
       if hp <= 0 do
+        profNumPlayer2 = profNumPlayer2 - 1
         defenseProf = Map.put(defenseProf,:status, "offline")
         defenseProf = Map.put(defenseProf,:hp, 0)
-        swap(game,defenseProf)
+        if profNumPlayer2 == 0 do
+          msg = "Prof of player2 loses all HP"
+
+          else
+          playerTwoTeam = deadSwap(profNumPlayer2)
+        end
+
       else
 
 
@@ -184,26 +199,13 @@ defmodule Profbattle.Game do
 
   end
 
-  def getAngry(defenseProf) do
-    50
-  end
 
-  def calAttack(attackProf,defenseProf) do
 
-    attack = Enum.fetch!(profs(),attackProf.id).attack
-
-    defenseProfDate = Enum.fetch!(profs(),defenseProf.id)
-    defense = defenseProfDate.defense
-    hp = defenseProf.hp
-
-    50
-
-  end
 
 
   # when call swap current prof will go to the last position, selected prof should go to first
 
-  def swap(game,prof) do
+  def swapAction(game,prof) do
 
 
   end
@@ -219,12 +221,7 @@ defmodule Profbattle.Game do
   end
 
 
-  def getHp(prof) do
-    hp = Enum.fetch!(profs(),prof).hp
 
-    100
-
-  end
 
 
   def addPlayer(game) do
@@ -242,6 +239,8 @@ defmodule Profbattle.Game do
       profs: profs(),
       profNumPlayer1: 0,
       profNumPlayer2: 0,
+      phrase: "",
+      msg: "",
 
     }
   end
@@ -277,6 +276,8 @@ defmodule Profbattle.Game do
         player2Action: "",
         profNumPlayer1: profNumPlayer1,
         profNumPlayer2: profNumPlayer2,
+        phrase: "",
+        msg: "",
       }
 
       else
@@ -292,6 +293,8 @@ defmodule Profbattle.Game do
         profs: gameProfs,
         profNumPlayer1: profNumPlayer1,
         profNumPlayer2: profNumPlayer2,
+        phrase: "",
+        msg: "",
       }
     end
   end
@@ -415,3 +418,191 @@ end
 #
 #
 #end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#############################################################################################
+
+# Joe's
+
+
+
+# Joe Working on
+# input [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: 0, special: false}]
+def getAngry(defenseProf) do
+  # get id for input, and old anger
+  50 # return a new anger
+end
+
+# Joe working on
+# input [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: 0, special: false}]
+# input [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: 0, special: false}]
+def calAttack(attackProf,defenseProf) do
+
+  # same as anger
+
+  attack = Enum.fetch!(profs(),attackProf.id).attack
+
+  defenseProfDate = Enum.fetch!(profs(),defenseProf.id)
+  defense = defenseProfDate.defense
+  hp = defenseProf.hp
+# return new HP
+  50
+
+end
+
+# input id of a prof
+def getHp(prof) do
+  hp = Enum.fetch!(profs(),prof).hp
+
+  # use hp above to cal a initial HP for prof
+  100
+
+end

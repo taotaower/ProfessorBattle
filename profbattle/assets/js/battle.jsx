@@ -149,32 +149,29 @@ class Battle extends React.Component {
             .receive("error", resp => {
                 console.log("Unable to join", resp)
             });
-        this.channel.on("update", this.gotView.bind(this));
+
+        this.channel.on("update", this.gotView.bind(this))
+
         this.selectProf = this.selectProf.bind(this);
         console.log("get reload for Battle")
     }
 
 
 
-
-
-
-
     gotView(view) {
-
-        console.log("updating main view",view.game);
-        console.log(this);
+        console.log("got view right now");
 
         this.setState(view.game);
-        this.forceUpdate()
+
     }
 
 
     selectProf(prof) {
 
             this.channel.push("selectProf", {player: this.player, professor: prof})
-                .receive("ok", this.gotView.bind(this))
-                .receive("error", resp => { console.log("Unable to select", resp) });
+
+     //           .receive("ok", this.gotView.bind(this))
+     //           .receive("error", resp => { console.log("Unable to select", resp) });
 
     }
 
