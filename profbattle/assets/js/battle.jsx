@@ -100,15 +100,19 @@ class SelectProf extends React.Component {
         this.channel = props.channel;
         this.profs = props.profs;
         this.playerTurn = props.playerTurn;
+        this.player1 = props.player1;
+        this.player2 = props.player2;
         this.renderProfs = this.renderProfs.bind(this);
     }
     renderProfs(profs) {
         return profs.map((prof, index) => {
             return (
                 <Prof key = {prof.id}
-                    prof={prof}
+                      prof = {prof}
                       channel = {this.channel}
-                      playerTurn = {this.playerTurn}/>
+                      playerTurn = {this.playerTurn}
+                      player1 = {this.player1}
+                      player2 = {this.player2}/>
             );
         });
     }
@@ -219,6 +223,8 @@ class Prof extends React.Component {
         this.prof = props.prof;
         this.channel = props.channel;
         this.playerTurn = props.playerTurn;
+        this.player1 = props.player1;
+        this.player2 = props.player2;
         this.selectProf = this.selectProf.bind(this);
     }
 
@@ -231,20 +237,36 @@ class Prof extends React.Component {
 
     render(){
 
-        let btn = <button type="button" className={"btn btn-primary"} onClick={() => this.selectProf(this.prof.id)}>Select</button>;
+        console.log("p1=" + this.player1);
+        console.log("p2=" + this.player2);
+
+        let img = <img src={this.prof.pic.unselected} width={"128"} onClick={() => this.selectProf(this.prof.id)}/>;
 
         if (this.prof.selected || this.playerTurn !== window.player){
 
-            btn = <button type="button" className={"btn btn-secondary"} disabled>Select</button>;
+            img = <img src={this.prof.pic.selected} width={"128"}/>;
 
         }
+
+            for (var i = 0; i < this.player1.length; i++) {
+                if (this.player1[i].id === this.prof.id) {
+                    img = <img src={this.prof.pic.oneSelected} width={"128"}/>;
+                }
+            }
+
+            for (var i = 0; i < this.player2.length; i++) {
+                if (this.player2[i].id === this.prof.id) {
+                    img = <img src={this.prof.pic.twoSelected} width={"128"}/>;
+                }
+            }
+
 
         return(
             <div className={"col-2"}>
                 <div><b>{this.prof.name}</b></div>
                 <div><p></p></div>
                 <div><p></p></div>
-                <div><img src={this.prof.pic} width={"128"}/></div>
+                <div>{img}</div>
                 <div><b>HP:</b> {this.prof.hp}</div>
                 <div><b>Attack:</b> {this.prof.attack}</div>
                 <div><b>Defense:</b> {this.prof.defense}</div>
@@ -252,7 +274,6 @@ class Prof extends React.Component {
                 <div><b>Special:</b> {this.prof.special}</div>
                 <div><p></p></div>
                 <div><p></p></div>
-                {btn}
             </div>
         );
     }
@@ -317,7 +338,33 @@ class Battle extends React.Component {
         }
         else if (this.state.gameState == 1) {
             // Professor selection screen
-            let selectingCon = <span>{this.state.playerTurn} is choosing his/her Professor</span>;
+            let playerString = this.state.playerTurn;
+
+            if (playerString === "player1")
+            {playerString = <font color="blue"><b> Player 1</b></font>;}
+            else
+            {playerString = <font color="red"><b> Player 2</b></font>;}
+
+            let selectingCon = <span>{playerString} is choosing their Professor</span>;
+
+            let playerLength = 0
+
+            if (this.state.playerTurn === "player1")
+            {playerLength = this.state.player1.length;}
+            else
+            {playerLength = this.state.player2.length;}
+
+            if (this.state.playerTurn === this.player) {
+                if (playerLength === 0) {
+                    selectingCon = <span>{playerString}, select your first Professor!</span>;
+                }
+                if (playerLength === 1) {
+                    selectingCon = <span>{playerString}, select your second Professor!</span>;
+                }
+                if (playerLength === 2) {
+                    selectingCon = <span>{playerString}, select your final Professor!</span>;
+                }
+            }
 
             return (
                 <div>
@@ -325,7 +372,9 @@ class Battle extends React.Component {
                     <SelectProf key = {this.state.playerTurn}
                                 profs={this.state.profs}
                                 channel = {this.channel}
-                                playerTurn = {this.state.playerTurn}/>
+                                playerTurn = {this.state.playerTurn}
+                                player1 = {this.state.player1}
+                                player2 = {this.state.player2}/>
                 </div>
             )
 
