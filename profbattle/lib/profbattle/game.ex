@@ -407,12 +407,12 @@ def swap(playerTeam,number,prof) do
   def profs() do
     # define profs' info here
     [
-      %{id: 0, name: "clinger", hp: 3.63, attack: 4.05, defense: 3.95, speed: 3.61, special: 5.00, pic: "", selected: false},
-      %{id: 1, name: "tuck", hp: 4.37, attack: 3.43, defense: 4.53, speed: 4.23, special: 4.07, pic: "",selected: false},
-      %{id: 2, name: "platt", hp: 3.93, attack: 3.83, defense: 4.17, speed: 4.25, special: 3.57, pic: "",selected: false},
-      %{id: 3, name: "young", hp: 4.78, attack: 3.42, defense: 4.84, speed: 4.83, special: 3.00, pic: "",selected: false},
-      %{id: 4, name: "weintraub", hp: 3.90, attack: 4.75, defense: 4.27, speed: 3.87, special: 4.76, pic: "",selected: false},
-      %{id: 5, name: "derbinsky", hp: 4.73, attack: 3.90, defense: 4.73, speed: 4.58, special: 3.40, pic: "",selected: false},
+      %{id: 0, name: "clinger", hp: 3.63, attack: 4.05, defense: 3.95, speed: 3.61, special: 5.00, pic: "/images/Clinger.jpg", selected: false},
+      %{id: 1, name: "tuck", hp: 4.37, attack: 3.43, defense: 4.53, speed: 4.23, special: 4.07, pic: "/images/Tuck.jpg",selected: false},
+      %{id: 2, name: "platt", hp: 3.93, attack: 3.83, defense: 4.17, speed: 4.25, special: 3.57, pic: "/images/Platt.jpg",selected: false},
+      %{id: 3, name: "young", hp: 4.78, attack: 3.42, defense: 4.84, speed: 4.83, special: 3.00, pic: "/images/Young.jpg",selected: false},
+      %{id: 4, name: "weintraub", hp: 3.90, attack: 4.75, defense: 4.27, speed: 3.87, special: 4.76, pic: "/images/Michael.jpg",selected: false},
+      %{id: 5, name: "derbinsky", hp: 4.73, attack: 3.90, defense: 4.73, speed: 4.58, special: 3.40, pic: "/images/nate.jpg",selected: false},
     ]
   end
 
@@ -422,77 +422,6 @@ def swap(playerTeam,number,prof) do
   end
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  # Joe's
-
-
-
-  # Joe Working on
-  # input [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: 0, special: false}]
-  def getAngry(defenseProf) do
-    # get id for input, and old anger
-    50 # return a new anger
-  end
-
-  # Joe working on
-  # input [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: 0, special: false}]
-  # input [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: 0, special: false}]
-  def calAttack(attackProf,defenseProf) do
-
-    # same as anger
-
-    attack = Enum.fetch!(profs(),attackProf.id).attack
-
-    defenseProfDate = Enum.fetch!(profs(),defenseProf.id)
-    defense = defenseProfDate.defense
-    hp = defenseProf.hp
-    # return new HP
-    50
-
-  end
-
-  # input id of a prof
-  def getHp(prof) do
-    hp = Enum.fetch!(profs(),prof).hp
-
-    # use hp above to cal a initial HP for prof
-    100
-
-  end
-
-
-
-
-
-
-
-
-
-end
 
 
 
@@ -742,3 +671,42 @@ end
 
 
 #############################################################################################
+
+# Joe's
+
+
+
+# Joe Working on
+# input [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: 0, special: false}]
+def getAngry(defenseProf) do
+  # get id for input, and old anger
+  50 # return a new anger
+end
+
+# Joe working on
+# input [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: 0, special: false}]
+# input [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: 0, special: false}]
+def calAttack(attackProf,defenseProf) do
+
+  # same as anger
+
+  attack = Enum.fetch!(profs(),attackProf.id).attack
+
+  defenseProfDate = Enum.fetch!(profs(),defenseProf.id)
+  defense = defenseProfDate.defense
+  hp = defenseProf.hp
+# return new HP
+  50
+
+end
+
+# input id of a prof
+def getHp(prof) do
+  hp = Enum.fetch!(profs(),prof).hp
+
+  # use hp above to cal a initial HP for prof
+  100
+
+end
+
+end

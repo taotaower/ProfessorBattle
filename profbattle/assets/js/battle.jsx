@@ -244,7 +244,7 @@ class Prof extends React.Component {
                 <div><b>{this.prof.name}</b></div>
                 <div><p></p></div>
                 <div><p></p></div>
-                <div>{this.prof.pic} picture will show here</div>
+                <div><img src={this.prof.pic} width={"128"}/></div>
                 <div><b>HP:</b> {this.prof.hp}</div>
                 <div><b>Attack:</b> {this.prof.attack}</div>
                 <div><b>Defense:</b> {this.prof.defense}</div>
