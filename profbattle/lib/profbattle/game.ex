@@ -175,7 +175,7 @@ defmodule Profbattle.Game do
     playerTwoTeam = game.player2
     profNumPlayer1 = game.profNumPlayer1
     profNumPlayer2 = game.profNumPlayer2
-    state = game.state
+    state = game.gameState
     msg = ""
     if playerTurn == "player1" do
       msg = "player1 attacks player2"
@@ -255,7 +255,7 @@ def swap(playerTeam,number,prof) do
     third = List.last(playerTeam)
     if number == 3 do
 
-      if prof == "0" do
+      if prof == 0 do
 
         [second,third,first]
 
@@ -277,6 +277,8 @@ def swap(playerTeam,number,prof) do
   # when call swap current prof will go to the last position, selected prof should go to first
 
   def swapAction(game,prof) do
+
+    IO.inspect prof
 
     playerTurn = game.playerTurn
     playerOneTeam = game.player1

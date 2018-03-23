@@ -7,9 +7,6 @@ defmodule ProfbattleWeb.GamesChannel do
     if authorized?(payload) do
       game = Profbattle.GameBackup.load(name)
 
-      IO.inspect "join a game condition"
-      IO.inspect game
-
       socket = socket
                |> assign(:game, game)
                |> assign(:name, name)
