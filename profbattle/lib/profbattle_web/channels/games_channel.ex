@@ -41,12 +41,12 @@ defmodule ProfbattleWeb.GamesChannel do
 
   # Channels can be used in a request/response fashion
   # by sending replies to requests from the client
-  def handle_in("attack", %{"player" => n}, socket) do
+  def handle_in("attack", %{}, socket) do
 
     name = socket.assigns[:name]
     game = Profbattle.GameBackup.load(name)
 
-    game = Game.attack(game, n)
+    game = Game.attackAction(game)
     Profbattle.GameBackup.save(socket.assigns[:name], game)
     socket = assign(socket, :game, game)
 
@@ -55,12 +55,12 @@ defmodule ProfbattleWeb.GamesChannel do
   end
 
   # professor is array location
-  def handle_in("swap", %{"player" => n, "professor" => p}, socket) do
+  def handle_in("swap", %{"professor" => p}, socket) do
 
     name = socket.assigns[:name]
     game = Profbattle.GameBackup.load(name)
 
-    game = Game.swap(game, n, p)
+    game = Game.swapAction(game, p)
     Profbattle.GameBackup.save(socket.assigns[:name], game)
     socket = assign(socket, :game, game)
 
@@ -74,14 +74,15 @@ defmodule ProfbattleWeb.GamesChannel do
   end
 
 
-  def handle_in("selectProf", %{"player" => n, "professor" => p}, socket) do
+  def handle_in("selectProf", %{"professor" => p}, socket) do
 
     name = socket.assigns[:name]
     game = Profbattle.GameBackup.load(name)
 
-    game = Game.selectProf(game, n ,p)
+    game = Game.selectProf(game,p)
     Profbattle.GameBackup.save(socket.assigns[:name], game)
-    socket = assign(socket, :game, game)
+    socket = socket
+             |> assign(:game, game)
 
     broadcast! socket, "update", %{game: game}
     {:noreply, socket}

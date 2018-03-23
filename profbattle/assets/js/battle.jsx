@@ -14,54 +14,83 @@ export default function run_game(root, channel) {
 
 class Display extends React.Component {
 
+    constructor(props) {
+        super(props);
+
+        this.prof = props.prof;
+        this.instr = props.instr;
+
+    }
+
 
     render() {
 
+        let instruct = "";
+        if (this.instr){
+            instruct = <h4 style={{position:"relative",top:"50px"}} >What will Professor {this.prof.name} do ?</h4>
+        }
+
         return (
+
 
             <div class="container" style={{
                 position: 'relative',
 
             }}>
-                <p>Professor Clinger</p>
+                <h3>{this.prof.name}</h3>
                 <div class="card w-50">
 
-                    <div class="row">
-                        <p>HP</p>
-                        <div class="progress">
-                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="50"
-                                 aria-valuemin="0" aria-valuemax="100" style={{width: 300}}></div>
-                        </div>
-
-                        <p>Anger</p>
-
-                        <div class="progress">
-                            <div class="progress-bar bg-danger" role="progressbar" style={{width: 300}}
-                                 aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-
+                </div>
+                <div>
+                    <p>HP</p>
+                    <div class="progress">
+                        <div class="progress-bar bg-success" role="progressbar" aria-valuenow= {this.prof.hp}
+                             aria-valuemin="0" aria-valuemax="100" style={{width: this.prof.hp + "%"}}></div>
                     </div>
+
+                    <p>Anger</p>
+
+                    <div class="progress">
+                        <div class="progress-bar bg-danger" role="progressbar" style={{width: this.prof.anger + "%"}}
+                             aria-valuenow = {this.prof.anger} aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+
+
                 </div>
+
+                {instruct}
             </div>
         );
     }
 
 }
 
-class ActionBtn extends React.Component {
-    render() {
-
-        return (
-            <div class="justify-content-center">
-                What will Professor Clinger do?
-                <div class="btn-group" role="group" aria-label="player1 commands">
-                    <button type="button" class="btn btn-secondary">ATTACK</button>
-                    <button type="button" class="btn btn-secondary">SWAP</button>
-                </div>
-            </div>
-        );
-    }
-}
+// class AttackBtn extends React.Component {
+//
+//     constructor(props) {
+//         super(props);
+//
+//         this.channel = props.channel;
+//
+//         this.attackAction = this.attackAction.bind(this);
+//     }
+//     attackAction() {
+//
+//         this.channel.push("attack", {})
+//
+//     }
+//
+//
+//     render() {
+//
+//         return (
+//             <div class="justify-content-center">
+//
+//                 <div class="btn-group" role="group" aria-label="player1 commands">
+//                     <button type="button" class="btn btn-secondary">ATTACK</button>
+//         );
+//     }
+// }
 
 
 class SelectProf extends React.Component {
@@ -70,7 +99,6 @@ class SelectProf extends React.Component {
         super(props);
         this.channel = props.channel;
         this.profs = props.profs;
-        this.selectProf = props.selectProf;
         this.playerTurn = props.playerTurn;
         this.renderProfs = this.renderProfs.bind(this);
     }
@@ -79,8 +107,7 @@ class SelectProf extends React.Component {
             return (
                 <Prof key = {prof.id}
                     prof={prof}
-                  //    channel = {this.channel}
-                      selectProf={this.selectProf}
+                      channel = {this.channel}
                       playerTurn = {this.playerTurn}/>
             );
         });
@@ -92,15 +119,113 @@ class SelectProf extends React.Component {
     }
 }
 
+
+class BackupProf extends React.Component {
+
+    constructor(props) {
+        super(props);
+        //  this.clickEvent = this.clickEvent.bind(this);
+        this.profs = props.profs;
+        this.channel = props.channel;
+        this.profNumPlayer = props.profNumPlayer ;
+        this.swapAction = this.swapAction.bind(this);
+        this.chooseProf = this.chooseProf.bind(this);
+        this.renderProfs = this.renderProfs.bind(this);
+        this.cancelSwap = this.cancelSwap.bind(this);
+
+        this.SelectedId = "0";
+    }
+
+    swapAction(prof){
+        this.channel.push("swap", {professor: prof})
+        let swapPad = $("#backup-pad");
+        swapPad.hide();
+
+    }
+
+    chooseProf(index){
+
+        this.SelectedId = index;
+        console.log(this.SelectedId)
+    }
+
+    cancelSwap(){
+        let swapPad = $("#backup-pad");
+        let actionBtns = $("#action-btns");
+
+        swapPad.hide();
+        actionBtns.show();
+
+    }
+
+    renderProfs(profs) {
+
+
+
+
+        return profs.map((prof, index) => {
+            let selRadio = <input type="radio"  value={index} onClick={() => this.chooseProf(index)}/>;
+            if (prof.status === "offline"){
+                selRadio = "";
+            }
+            return (
+                <div className={"col-5"}>
+                <label>
+                    {selRadio}
+                    <div><b>{prof.name}</b></div>
+                    <div><p></p></div>
+                    <div><p></p></div>
+                    <div><b>HP:</b> {prof.hp}</div>
+                    <div><b>Anger:</b> {prof.anger}</div>
+                    <div><b>Status:</b> {prof.status}</div>
+                    <div><p></p></div>
+                    <div><p></p></div>
+                </label>
+                </div>
+
+            );
+        });
+    }
+
+    render(){
+        let swapBtn = <button id={"ok"} className={"btn btn-primary"} onClick={() => this.swapAction(this.SelectedId)}>Ok</button>;
+
+        if (this.profNumPlayer == 1){
+            swapBtn = <button className={"btn btn-primary"} > You do not have any Professors in backup</button>
+        }
+
+        return(
+            <div>
+                <div className={"row"}>
+                {this.renderProfs(this.profs)}
+                </div>
+                {swapBtn}
+                <button id={"cancel"} className={"btn btn-danger"} onClick={this.cancelSwap}>Cancel</button>
+
+            </div>
+        )
+
+    }
+
+
+
+}
+
 class Prof extends React.Component {
 
     constructor(props) {
         super(props);
       //  this.clickEvent = this.clickEvent.bind(this);
         this.prof = props.prof;
-        this.selectProf = props.selectProf.bind(this);
-    //    this.channel = props.channel;
+        this.channel = props.channel;
         this.playerTurn = props.playerTurn;
+        this.selectProf = this.selectProf.bind(this);
+    }
+
+    selectProf(prof) {
+
+        this.channel.push("selectProf", {professor: prof})
+
     }
 
 
@@ -113,8 +238,6 @@ class Prof extends React.Component {
             btn = <button type="button" className={"btn btn-secondary"} disabled>Select</button>;
 
         }
-
-
 
         return(
             <div className={"col-2"}>
@@ -144,6 +267,7 @@ class Battle extends React.Component {
         this.player = window.player;
         this.channel = props.channel;
         this.state = {};
+        this.showSwapPad = this.showSwapPad.bind(this);
         this.channel.join()
             .receive("ok", this.gotView.bind(this))
             .receive("error", resp => {
@@ -151,29 +275,33 @@ class Battle extends React.Component {
             });
 
         this.channel.on("update", this.gotView.bind(this))
-
-        this.selectProf = this.selectProf.bind(this);
-        console.log("get reload for Battle")
     }
 
 
 
     gotView(view) {
-        console.log("got view right now");
+
+        console.log(view.game.player1);
+        console.log(view.game.player2);
+        console.log(view.game.round);
 
         this.setState(view.game);
+        this.forceUpdate()
 
     }
 
+    showSwapPad(){
 
-    selectProf(prof) {
+        let swapPad = $("#backup-pad");
 
-            this.channel.push("selectProf", {player: this.player, professor: prof})
+        let actionBtns = $("#action-btns");
 
-     //           .receive("ok", this.gotView.bind(this))
-     //           .receive("error", resp => { console.log("Unable to select", resp) });
+        swapPad.show("slow");
+        actionBtns.hide();
+
 
     }
+
 
     render() {
 
@@ -197,7 +325,6 @@ class Battle extends React.Component {
                     <SelectProf key = {this.state.playerTurn}
                                 profs={this.state.profs}
                                 channel = {this.channel}
-                                selectProf = {this.selectProf}
                                 playerTurn = {this.state.playerTurn}/>
                 </div>
             )
@@ -205,29 +332,106 @@ class Battle extends React.Component {
         }
 
         else if (this.state.gameState == 2) {
-            // Main battle screen
-            if (this.player === "player1")
-                return (
-                    <div>
-                        <div className={"row"}>
 
-                            <div className={"col"}>
-                                <Display/>
-                            </div>
-                            <div className={"col"}>
-                                <Display/>
-                            </div>
+            let fightCon = <span>{this.state.playerTurn} is choosing his/her Action</span>;
+            let attackBtn = "";
+            let swapBtn = "";
+            if (this.player === this.state.playerTurn && this.player !== "watcher" ){
+                attackBtn = <button id={"attack-btn"} className={"btn btn-info"}>Attack</button>;
+                swapBtn =<button id={"swap-btn"} className={"btn btn-warning"} onClick={this.showSwapPad}>Swap</button>
+            }
+
+            let display1 = "";
+            let display2 = "";
+            let backup = "";
+
+
+            if (this.player === "player1"){
+                display1 = <Display
+                           key = {this.state.round}
+                           prof = {this.state.player1[0]}
+                           instr = {true}/>;
+                display2 = <Display
+                    key = {this.state.round}
+                           prof = {this.state.player2[0]}
+                           />;
+
+                backup =  <div id={"backup"} > <BackupProf
+                    key = {this.state.round}
+                    profs={this.state.player1.slice(1,3)}
+                    profNumPlayer={this.state.profNumPlayer1}
+                    channel = {this.channel}/></div>;
+            }
+            else if(this.player === "player2") {
+                display1 = <Display
+                    key = {this.state.round}
+                    prof = {this.state.player2[0]}
+                    instr = {true}/>;
+                display2 = <Display
+                    key = {this.state.round}
+                    prof = {this.state.player1[0]}
+                    />;
+
+                backup =  <div id={"backup"} > <BackupProf
+                    key = {this.state.round}
+                    profs={this.state.player2.slice(1,3)}
+                    profNumPlayer={this.state.profNumPlayer2}
+                    channel = {this.channel}/></div>;
+            }
+            else {
+                display1 = <Display
+                    key = {this.state.round}
+                    prof = {this.state.player1[0]}/>;
+                display2 = <Display
+                    key = {this.state.round}
+                    prof = {this.state.player2[0]}
+                />;
+            }
+
+
+            return (
+
+                <div>
+                    <div class="alert alert-dark" role="alert">
+                        {fightCon}
+                    </div>
+
+                    <div className={"row"}>
+
+                        <div className={"col"}>
+                            {display1}
+                        </div>
+                        <div className={"col"}>
+                            {display2}
+                        </div>
+                    </div>
+
+                    <div className={"row"}>
+
+                        <div className={"col"}>
+                    <div id={"action-btns"} class="btn-group btn-group-lg" role="group" aria-label="Basic example" style={{position:"relative",top:"100px", left:"20px"}}>
+
+                        <div >
+                            {attackBtn}
                         </div>
 
-                        <div className={"row"}>
+                        <div >
+                            {swapBtn}
+                        </div>
+                    </div>
 
-                            <ActionBtn/>
+                    </div>
+                        <div className={"col"} style={{position:"relative", left:"20px", display: "none"}} id={"backup-pad"} >
+                            {backup}
                         </div>
 
                     </div>
 
+                </div>
 
-                )
+
+            )
+
         }
 
         else if (this.state.gameState == 3) {

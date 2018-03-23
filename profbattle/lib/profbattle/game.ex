@@ -146,7 +146,25 @@ defmodule Profbattle.Game do
 
 # defend prof will get angry
 
-  def deadSwap(profNumPlayer2) do
+  def offSwap(playerTeam,profNum) do
+
+    first = List.first(playerTeam)
+    playerTeam = List.delete(playerTeam, first)
+    second = List.first(playerTeam)
+    third = List.last(playerTeam)
+    if profNum == 2 do
+
+      [second,third,first]
+    else
+
+      [second,first,third]
+    end
+
+  end
+
+  def updateHP(defenseProf,playerTwoTeam) do
+
+    List.replace_at(playerTwoTeam, 0, defenseProf)
 
   end
 
@@ -157,55 +175,136 @@ defmodule Profbattle.Game do
     playerTwoTeam = game.player2
     profNumPlayer1 = game.profNumPlayer1
     profNumPlayer2 = game.profNumPlayer2
+    state = game.state
     msg = ""
     if playerTurn == "player1" do
+      msg = "player1 attacks player2"
       attackProf = List.first(playerOneTeam)
       defenseProf = List.first(playerTwoTeam)
       hp = calAttack(attackProf,defenseProf)
-
       if hp <= 0 do
         profNumPlayer2 = profNumPlayer2 - 1
         defenseProf = Map.put(defenseProf,:status, "offline")
         defenseProf = Map.put(defenseProf,:hp, 0)
+        playerTwoTeam = updateHP(defenseProf,playerTwoTeam)
         if profNumPlayer2 == 0 do
-          msg = "Prof of player2 loses all HP"
-
+          msg = "player1 wins"
+          state = 3
           else
-          playerTwoTeam = deadSwap(profNumPlayer2)
+          playerTwoTeam = offSwap(playerTwoTeam,profNumPlayer2)
         end
 
       else
 
-
         defenseProf = Map.put(defenseProf,:hp, hp)
+        playerTwoTeam = updateHP(defenseProf,playerTwoTeam)
       end
 
-      %{
-        gameState: game.gameState,
-        round: (game.round + 1),
-        playerTurn: nextPlayer(playerTurn),
-        player1: game.player1,
-        player2: playerTwoTeam,
-        player1Action: "",
-        player2Action: "",
-      }
+      else
+      msg = "player2 attacks player1"
+      attackProf = List.first(playerTwoTeam)
+      defenseProf = List.first(playerOneTeam)
+      hp = calAttack(attackProf,defenseProf)
+      if hp <= 0 do
+        profNumPlayer1 = profNumPlayer1 - 1
+        defenseProf = Map.put(defenseProf,:status, "offline")
+        defenseProf = Map.put(defenseProf,:hp, 0)
+        playerOneTeam = updateHP(defenseProf,playerOneTeam)
+        if profNumPlayer1 == 0 do
+          msg = "Player2 wins "
+          state = 3
+        else
+          playerOneTeam = offSwap(playerOneTeam,profNumPlayer1)
+        end
 
       else
 
-      attackProf = List.first(game.player2)
-      defenseProf = List.first(game.player1)
+        defenseProf = Map.put(defenseProf,:hp, hp)
+        playerOneTeam = updateHP(defenseProf,playerOneTeam)
+      end
+
+
 
     end
+
+
+    %{
+      gameState: state,
+      round: (game.round + 1), #delete maybe
+      playerTurn: nextPlayer(playerTurn),
+      player1: playerOneTeam, #{prof1: #{prof: 1, hp:100, sp: 100}}
+      player2: playerTwoTeam,
+      player1Action: "",
+      player2Action: "",
+      profNumPlayer1: profNumPlayer1,
+      profNumPlayer2: profNumPlayer2,
+      phrase: "",
+      msg: msg,
+    }
 
   end
 
 
 
 
+def swap(playerTeam,number,prof) do
 
+    first = List.first(playerTeam)
+    playerTeam = List.delete(playerTeam, first)
+    second = List.first(playerTeam)
+    third = List.last(playerTeam)
+    if number == 3 do
+
+      if prof == "0" do
+
+        [second,third,first]
+
+        else
+        [third,second,first]
+
+      end
+
+    else
+
+    [second,first,third]
+
+    end
+
+
+
+
+  end
   # when call swap current prof will go to the last position, selected prof should go to first
 
   def swapAction(game,prof) do
+
+    playerTurn = game.playerTurn
+    playerOneTeam = game.player1
+    playerTwoTeam = game.player2
+    profNumPlayer1 = game.profNumPlayer1
+    profNumPlayer2 = game.profNumPlayer2
+    msg = ""
+    if playerTurn == "player1" do
+
+      playerOneTeam = swap(playerOneTeam,profNumPlayer1,prof)
+     else
+      playerTwoTeam = swap(playerTwoTeam,profNumPlayer2,prof)
+
+    end
+
+    %{
+      gameState: game.gameState,
+      round: (game.round + 1),
+      playerTurn: nextPlayer(playerTurn),
+      player1: playerOneTeam,
+      player2: playerTwoTeam,
+      player1Action: "",
+      player2Action: "",
+      profNumPlayer1: profNumPlayer1,
+      profNumPlayer2: profNumPlayer2,
+      phrase: "",
+      msg: msg,
+    }
 
 
   end
@@ -245,7 +344,11 @@ defmodule Profbattle.Game do
     }
   end
 
-  def selectProf(game,player,prof) do
+  def getName(id) do
+    Enum.fetch!(profs(),id).name
+  end
+
+  def selectProf(game,prof) do
     playerTurn = game.playerTurn
     playerOneTeam = game.player1
     playerTwoTeam = game.player2
@@ -254,10 +357,10 @@ defmodule Profbattle.Game do
     gameState = game.gameState
     gameProfs = game.profs
     if playerTurn == "player1" do
-       playerOneTeam = playerOneTeam ++ [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: (profNumPlayer1+1), special: false}]
+       playerOneTeam = playerOneTeam ++ [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: (profNumPlayer1+1), special: false, name: getName(prof) }]
        profNumPlayer1 = profNumPlayer1 + 1
     else
-      playerTwoTeam = playerTwoTeam ++ [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: (profNumPlayer2+1), special: false}]
+      playerTwoTeam = playerTwoTeam ++ [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: (profNumPlayer2+1), special: false, name: getName(prof) }]
       profNumPlayer2 = profNumPlayer2 + 1
     end
 
@@ -317,6 +420,77 @@ defmodule Profbattle.Game do
     Enum.shuffle(["player1","player2"])
           |>List.first()
   end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  # Joe's
+
+
+
+  # Joe Working on
+  # input [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: 0, special: false}]
+  def getAngry(defenseProf) do
+    # get id for input, and old anger
+    50 # return a new anger
+  end
+
+  # Joe working on
+  # input [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: 0, special: false}]
+  # input [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: 0, special: false}]
+  def calAttack(attackProf,defenseProf) do
+
+    # same as anger
+
+    attack = Enum.fetch!(profs(),attackProf.id).attack
+
+    defenseProfDate = Enum.fetch!(profs(),defenseProf.id)
+    defense = defenseProfDate.defense
+    hp = defenseProf.hp
+    # return new HP
+    50
+
+  end
+
+  # input id of a prof
+  def getHp(prof) do
+    hp = Enum.fetch!(profs(),prof).hp
+
+    # use hp above to cal a initial HP for prof
+    100
+
+  end
+
+
+
+
+
+
+
+
 
 end
 
@@ -568,40 +742,3 @@ end
 
 
 #############################################################################################
-
-# Joe's
-
-
-
-# Joe Working on
-# input [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: 0, special: false}]
-def getAngry(defenseProf) do
-  # get id for input, and old anger
-  50 # return a new anger
-end
-
-# Joe working on
-# input [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: 0, special: false}]
-# input [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: 0, special: false}]
-def calAttack(attackProf,defenseProf) do
-
-  # same as anger
-
-  attack = Enum.fetch!(profs(),attackProf.id).attack
-
-  defenseProfDate = Enum.fetch!(profs(),defenseProf.id)
-  defense = defenseProfDate.defense
-  hp = defenseProf.hp
-# return new HP
-  50
-
-end
-
-# input id of a prof
-def getHp(prof) do
-  hp = Enum.fetch!(profs(),prof).hp
-
-  # use hp above to cal a initial HP for prof
-  100
-
-end
