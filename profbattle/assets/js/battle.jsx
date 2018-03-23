@@ -289,6 +289,8 @@ class Battle extends React.Component {
         this.channel = props.channel;
         this.state = {};
         this.showSwapPad = this.showSwapPad.bind(this);
+        this.renderButtons = this.renderButtons.bind(this);
+        this.attackAction = this.attackAction.bind(this);
         this.channel.join()
             .receive("ok", this.gotView.bind(this))
             .receive("error", resp => {
@@ -321,6 +323,27 @@ class Battle extends React.Component {
         actionBtns.hide();
 
 
+    }
+
+    attackAction(){
+        this.channel.push("attack", {})
+    }
+
+    renderButtons() {
+        if (this.player === this.state.playerTurn && this.player !== "watcher" ) {
+            return  <div id={"action-btns"} class="btn-group btn-group-lg" role="group" aria-label="Basic example" style={{position:"relative",top:"100px", left:"20px"}}>
+
+                <div >
+                    <button id={"attack-btn"} className={"btn btn-info"} onClick={this.attackAction}>Attack</button>
+                </div>
+
+                <div >
+                    <button id={"swap-btn"} className={"btn btn-warning"} onClick={this.showSwapPad}>Swap</button>
+                </div>
+            </div>
+        } else {
+            return null;
+        }
     }
 
 
@@ -385,10 +408,10 @@ class Battle extends React.Component {
             let fightCon = <span>{this.state.playerTurn} is choosing his/her Action</span>;
             let attackBtn = "";
             let swapBtn = "";
-            if (this.player === this.state.playerTurn && this.player !== "watcher" ){
-                attackBtn = <button id={"attack-btn"} className={"btn btn-info"}>Attack</button>;
-                swapBtn =<button id={"swap-btn"} className={"btn btn-warning"} onClick={this.showSwapPad}>Swap</button>
-            }
+            // if (this.player === this.state.playerTurn && this.player !== "watcher" ){
+            //     attackBtn = <button id={"attack-btn"} className={"btn btn-info"}>Attack</button>;
+            //     swapBtn =<button id={"swap-btn"} className={"btn btn-warning"} onClick={this.showSwapPad}>Swap</button>
+            // }
 
             let display1 = "";
             let display2 = "";
@@ -458,18 +481,10 @@ class Battle extends React.Component {
                     <div className={"row"}>
 
                         <div className={"col"}>
-                    <div id={"action-btns"} class="btn-group btn-group-lg" role="group" aria-label="Basic example" style={{position:"relative",top:"100px", left:"20px"}}>
+                        {this.renderButtons()}
 
-                        <div >
-                            {attackBtn}
                         </div>
 
-                        <div >
-                            {swapBtn}
-                        </div>
-                    </div>
-
-                    </div>
                         <div className={"col"} style={{position:"relative", left:"20px", display: "none"}} id={"backup-pad"} >
                             {backup}
                         </div>
