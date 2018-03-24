@@ -138,6 +138,7 @@ class BackupProf extends React.Component {
         this.cancelSwap = this.cancelSwap.bind(this);
 
         this.SelectedId = "0";
+
     }
 
     swapAction(prof){
@@ -168,7 +169,7 @@ class BackupProf extends React.Component {
 
 
         return profs.map((prof, index) => {
-            let selRadio = <input type="radio"  value={index} onClick={() => this.chooseProf(index)}/>;
+            let selRadio = <input type="radio" name={"swapProf"} value={index} onClick={() => this.chooseProf(index)}/>;
             if (prof.status === "offline"){
                 selRadio = "";
             }
@@ -290,6 +291,7 @@ class Battle extends React.Component {
         this.state = {};
         this.showSwapPad = this.showSwapPad.bind(this);
         this.renderButtons = this.renderButtons.bind(this);
+        this.renderOpenPhrs = this.renderOpenPhrs.bind(this);
         this.attackAction = this.attackAction.bind(this);
         this.channel.join()
             .receive("ok", this.gotView.bind(this))
@@ -304,9 +306,6 @@ class Battle extends React.Component {
 
     gotView(view) {
 
-        console.log(view.game.player1);
-        console.log(view.game.player2);
-        console.log(view.game.round);
 
         this.setState(view.game);
         this.forceUpdate()
@@ -346,6 +345,34 @@ class Battle extends React.Component {
         }
     }
 
+    renderOpenPhrs(){
+            if (this.player === "player2"){
+                return <div className={"row phrase"}>
+                    <div class="alert alert-info col " role="alert">
+                        {this.state.openPhrase2}
+                    </div>
+                    <div class="alert alert-info col " role="alert">
+                        {this.state.openPhrase1}
+                    </div>
+                </div>
+
+
+            }
+            else{
+                return <div className={"row phrase"}>
+                    <div class="alert alert-info col " role="alert">
+                        {this.state.openPhrase1}
+                    </div>
+                    <div class="alert alert-info col " role="alert">
+                        {this.state.openPhrase2}
+                    </div>
+                </div>
+
+            }
+        }
+
+
+
 
     render() {
 
@@ -370,7 +397,7 @@ class Battle extends React.Component {
 
             let selectingCon = <span>{playerString} is choosing their Professor</span>;
 
-            let playerLength = 0
+            let playerLength = 0;
 
             if (this.state.playerTurn === "player1")
             {playerLength = this.state.player1.length;}
@@ -467,7 +494,7 @@ class Battle extends React.Component {
                     <div class="alert alert-dark" role="alert">
                         {fightCon}
                     </div>
-
+                    {this.renderOpenPhrs()}
                     <div className={"row"}>
 
                         <div className={"col"}>

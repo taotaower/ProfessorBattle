@@ -86,4 +86,10 @@ defmodule ProfbattleWeb.GamesChannel do
 
   end
 
+  def handle_in("close", %{"professor" => p}, socket) do
+
+      IO.inspect "closeeeeeee"
+
+  end
+
 end

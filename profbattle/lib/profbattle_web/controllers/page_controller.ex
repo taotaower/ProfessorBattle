@@ -8,7 +8,7 @@ defmodule ProfbattleWeb.PageController do
              |> List.first()
              |> Enum.map(fn(x) -> stateConvert(x) end)
 
-    IO.inspect states
+
 
     render conn, "index.html",states: states
   end
@@ -18,13 +18,12 @@ defmodule ProfbattleWeb.PageController do
   end
 
   defp stateConvert(game) do
-    IO.inspect game
+
     state = Tuple.to_list(game)
     name = List.first(state)  # get name
     state = List.last(state) # get number of players
 
-    IO.inspect "state"
-    IO.inspect state
+
 
     %{
     name: name,

@@ -75,7 +75,10 @@ function form_init() {
             alert("Something Wrong")
         }
 
-    })
+    });
+
+
+    $('.phrase').delay(1000).fadeOut();
 
 }
 
