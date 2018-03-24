@@ -6,7 +6,7 @@ defmodule Profbattle.Game do
       gameState: 0,
       round: 0, #delete maybe
       playerTurn: "",
-      player1: [], #{prof1: #{prof: 1, hp:100, sp: 100}}
+      player1: [],
       player2: [],
       player1Action: "",
       player2Action: "",
@@ -409,12 +409,24 @@ def swap(playerTeam,number,prof) do
   def profs() do
     # define profs' info here
     [
-      %{id: 0, name: "clinger", hp: 3.63, attack: 4.05, defense: 3.95, speed: 3.61, special: 5.00, pic: %{unselected: "/images/Clinger.jpg", selected: "/images/Clinger-grey.jpg", oneSelected: "/images/Clinger-blue-grey.jpg", twoSelected: "/images/Clinger-red-grey.jpg"}, selected: false},
-      %{id: 1, name: "tuck", hp: 4.37, attack: 3.43, defense: 4.53, speed: 4.23, special: 4.07, pic: %{unselected: "/images/Tuck.jpg", selected: "/images/Tuck-grey.jpg", oneSelected: "/images/Tuck-blue-grey.jpg", twoSelected: "/images/Tuck-red-grey.jpg"},selected: false},
-      %{id: 2, name: "platt", hp: 3.93, attack: 3.83, defense: 4.17, speed: 4.25, special: 3.57, pic: %{unselected: "/images/Platt.jpg", selected: "/images/Platt-grey.jpg", oneSelected: "/images/Platt-blue-grey.jpg", twoSelected: "/images/Platt-red-grey.jpg"},selected: false},
-      %{id: 3, name: "young", hp: 4.78, attack: 3.42, defense: 4.84, speed: 4.83, special: 3.00, pic: %{unselected: "/images/Young.jpg", selected: "/images/Young-grey.jpg", oneSelected: "/images/Young-blue-grey.jpg", twoSelected: "/images/Young-red-grey.jpg"},selected: false},
-      %{id: 4, name: "weintraub", hp: 3.90, attack: 4.75, defense: 4.27, speed: 3.87, special: 4.76, pic: %{unselected: "/images/Michael.jpg", selected: "/images/Michael-grey.jpg", oneSelected: "/images/Michael-blue-grey.jpg", twoSelected: "/images/Michael-red-grey.jpg"},selected: false},
-      %{id: 5, name: "derbinsky", hp: 4.73, attack: 3.90, defense: 4.73, speed: 4.58, special: 3.40, pic: %{unselected: "/images/nate.jpg", selected: "/images/nate-grey.jpg", oneSelected: "/images/nate-blue-grey.jpg", twoSelected: "/images/nate-red-grey.jpg"},selected: false},
+      %{id: 0, name: "clinger", hp: 3.63, attack: 4.05, defense: 3.95, speed: 3.61, special: 5.00,
+        pic: %{unselected: "/images/Clinger.jpg", selected: "/images/Clinger-grey.jpg",
+          oneSelected: "/images/Clinger-blue-grey.jpg", twoSelected: "/images/Clinger-red-grey.jpg"}, selected: false},
+      %{id: 1, name: "tuck", hp: 4.37, attack: 3.43, defense: 4.53, speed: 4.23, special: 4.07,
+        pic: %{unselected: "/images/Tuck.jpg", selected: "/images/Tuck-grey.jpg",
+          oneSelected: "/images/Tuck-blue-grey.jpg", twoSelected: "/images/Tuck-red-grey.jpg"},selected: false},
+      %{id: 2, name: "platt", hp: 3.93, attack: 3.83, defense: 4.17, speed: 4.25, special: 3.57,
+        pic: %{unselected: "/images/Platt.jpg", selected: "/images/Platt-grey.jpg",
+          oneSelected: "/images/Platt-blue-grey.jpg", twoSelected: "/images/Platt-red-grey.jpg"},selected: false},
+      %{id: 3, name: "young", hp: 4.78, attack: 3.42, defense: 4.84, speed: 4.83, special: 3.00,
+        pic: %{unselected: "/images/Young.jpg", selected: "/images/Young-grey.jpg",
+          oneSelected: "/images/Young-blue-grey.jpg", twoSelected: "/images/Young-red-grey.jpg"},selected: false},
+      %{id: 4, name: "weintraub", hp: 3.90, attack: 4.75, defense: 4.27, speed: 3.87, special: 4.76,
+        pic: %{unselected: "/images/Michael.jpg", selected: "/images/Michael-grey.jpg",
+          oneSelected: "/images/Michael-blue-grey.jpg", twoSelected: "/images/Michael-red-grey.jpg"},selected: false},
+      %{id: 5, name: "derbinsky", hp: 4.73, attack: 3.90, defense: 4.73, speed: 4.58, special: 3.40,
+        pic: %{unselected: "/images/nate.jpg", selected: "/images/nate-grey.jpg",
+          oneSelected: "/images/nate-blue-grey.jpg", twoSelected: "/images/nate-red-grey.jpg"},selected: false},
     ]
   end
 
@@ -422,10 +434,6 @@ def swap(playerTeam,number,prof) do
     Enum.shuffle(["player1","player2"])
           |>List.first()
   end
-
-
-
-
 
 
 #
@@ -676,39 +684,41 @@ def swap(playerTeam,number,prof) do
 
 # Joe's
 
+  # input [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: 0, special: false}]
+  def getAngry(defenseProf) do
+    anger = defenseProf.anger
+    special = Enum.fetch!(profs(),defenseProf.id).special
 
+    anger = anger + (special * 20)
+    #50
 
-# Joe Working on
-# input [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: 0, special: false}]
-def getAngry(defenseProf) do
-  # get id for input, and old anger
-  50 # return a new anger
-end
+  end
 
-# Joe working on
-# input [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: 0, special: false}]
-# input [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: 0, special: false}]
-def calAttack(attackProf,defenseProf) do
+  # input [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: 0, special: false}]
+  # input [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: 0, special: false}]
+  def calAttack(attackProf,defenseProf) do
+    attack = Enum.fetch!(profs(),attackProf.id).attack
+    defense = Enum.fetch!(profs(),defenseProf.id).defense
+    hp = defenseProf.hp
 
-  # same as anger
+    bonusDamage = 0
 
-  attack = Enum.fetch!(profs(),attackProf.id).attack
+    if (attack - defense) > 0 do
+      bonusDamage = attack - defense
+    end
 
-  defenseProfDate = Enum.fetch!(profs(),defenseProf.id)
-  defense = defenseProfDate.defense
-  hp = defenseProf.hp
-# return new HP
-  50
+    hp = hp - (20 + (bonusDamage * 10))
+    #50
 
-end
+  end
 
-# input id of a prof
-def getHp(prof) do
-  hp = Enum.fetch!(profs(),prof).hp
+  # input id of a prof
+  def getHp(prof) do
+    hp = Enum.fetch!(profs(),prof).hp
 
-  # use hp above to cal a initial HP for prof
-  100
+    # use hp above to cal a initial HP for prof
+    100
 
-end
+  end
 
 end
