@@ -23,7 +23,7 @@ class Display extends React.Component {
         this.phrase = props.phrase;
         this.action = props.action;
         this.renderPhrase = this.renderPhrase.bind(this);
-        console.log(this.phrase)
+
 
 
     }
@@ -37,17 +37,19 @@ class Display extends React.Component {
                 <text>{this.phrase}</text>
 
             </div>}
-        else{
+        else if(this.action === "attack"){
             return <div class="alert alert-danger phrase" role="alert">
+                <text>{this.phrase}</text>
+            </div>
+        }
+        else {
+            return <div class="alert alert-warning phrase" role="alert">
                 <text>{this.phrase}</text>
             </div>
         }
 
     }
 
-    dismissPhrs (){
-        $('.phrase').delay(1000).fadeOut();
-    }
 
 
     render() {
@@ -56,7 +58,7 @@ class Display extends React.Component {
         if (this.instr){
             instruct = <h4 style={{position:"relative",top:"50px"}} >What will Professor {this.prof.name} do ?</h4>
         }
-        $('.phrase').delay(1500).fadeOut();
+        $('.phrase').delay(1800).fadeOut();
         return (
 
             <div class="container" style={{

@@ -172,14 +172,25 @@ def swap(playerTeam,number,prof) do
     player2Action = ""
     if playerTurn == "player1" do
 
-      playerOneTeam = swap(playerOneTeam,profNumPlayer1,prof)
-      phrase1 = getTeamOpen(playerOneTeam)
-      player1Action = "swap"
-     else
-      playerTwoTeam = swap(playerTwoTeam,profNumPlayer2,prof)
-      phrase2 = getTeamOpen(playerTwoTeam)
-      player2Action = "swap"
+      if escape(playerOneTeam,playerTwoTeam) do
+        playerOneTeam = swap(playerOneTeam,profNumPlayer1,prof)
+        player1Action = "swap"
+        phrase1 = getTeamOpen(playerOneTeam)
+        else
+        player1Action = "caught"
+        phrase1 = caughtPhrase()
+      end
 
+     else
+
+      if escape(playerTwoTeam,playerOneTeam) do
+        playerTwoTeam = swap(playerTwoTeam,profNumPlayer2,prof)
+        phrase2 = getTeamOpen(playerTwoTeam)
+        player2Action = "swap"
+        else
+        player2Action = "caught"
+        phrase2 = caughtPhrase()
+      end
     end
 
     %{
@@ -212,6 +223,13 @@ def swap(playerTeam,number,prof) do
   end
 
 
+  def escape(team1,team2) do
+    speed1 = Enum.fetch!(profs(),List.first(team1).id).speed
+    speed2 = Enum.fetch!(profs(),List.first(team2).id).speed
+    chance = Enum.shuffle([true,false])
+             |>List.first()
+    speed1 > speed2 || chance
+  end
 
 
 
@@ -366,6 +384,10 @@ def swap(playerTeam,number,prof) do
   end
 
 
+  def caughtPhrase() do
+    Enum.shuffle(["Oops, I get caught....","OMG, Just Let me go!"])
+    |>List.first()
+    end
 
 
 
@@ -379,139 +401,6 @@ def swap(playerTeam,number,prof) do
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#############################################################################################
-
-# Joe's
 
   # input [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: 0, special: false}]
   def getAngry(defenseProf) do
