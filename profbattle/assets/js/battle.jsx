@@ -32,7 +32,6 @@ class Display extends React.Component {
 
         return (
 
-
             <div class="container" style={{
                 position: 'relative',
 
@@ -62,7 +61,6 @@ class Display extends React.Component {
             </div>
         );
     }
-
 }
 
 // class AttackBtn extends React.Component {
@@ -165,9 +163,6 @@ class BackupProf extends React.Component {
 
     renderProfs(profs) {
 
-
-
-
         return profs.map((prof, index) => {
             let selRadio = <input type="radio" name={"swapProf"} value={index} onClick={() => this.chooseProf(index)}/>;
             if (prof.status === "offline"){
@@ -211,10 +206,8 @@ class BackupProf extends React.Component {
         )
 
     }
-
-
-
 }
+
 
 class Prof extends React.Component {
 
@@ -238,10 +231,8 @@ class Prof extends React.Component {
 
     render(){
 
-        console.log("p1=" + this.player1);
-        console.log("p2=" + this.player2);
-
-        let img = <img src={this.prof.pic.unselected} width={"128"} onClick={() => this.selectProf(this.prof.id)}/>;
+        let img = <img src={this.prof.pic.unselected} width={"128"} style={{cursor: "pointer"}}
+                       onClick={() => this.selectProf(this.prof.id)}/>;
 
         if (this.prof.selected || this.playerTurn !== window.player){
 
@@ -261,7 +252,6 @@ class Prof extends React.Component {
                 }
             }
 
-
         return(
             <div className={"col-2"}>
                 <div><b>{this.prof.name}</b></div>
@@ -273,13 +263,9 @@ class Prof extends React.Component {
                 <div><b>Defense:</b> {this.prof.defense}</div>
                 <div><b>Speed:</b> {this.prof.speed}</div>
                 <div><b>Special:</b> {this.prof.special}</div>
-                <div><p></p></div>
-                <div><p></p></div>
             </div>
         );
     }
-
-
 }
 
 
@@ -301,8 +287,6 @@ class Battle extends React.Component {
 
         this.channel.on("update", this.gotView.bind(this))
     }
-
-
 
     gotView(view) {
 
@@ -376,33 +360,33 @@ class Battle extends React.Component {
 
     render() {
 
+        let playerString = this.state.playerTurn;
+        let playerLength = 0
+
+        if (playerString === "player1")
+            {playerString = <font color="blue"><b> Player 1</b></font>;}
+        else
+            {playerString = <font color="maroon"><b> Player 2</b></font>;}
+
         if (this.state.gameState == 0) {
             // Waiting for Player 2 to join screen
             return (
                 <div class="container">
                     <div class="panel panel-default">
-                        <div class="panel-body">Waiting for Player 2 to join.</div>
+                        <div class="panel-body">Waiting for <font color="maroon"><b> Player 2</b></font> to join.</div>
                     </div>
                 </div>
             )
         }
         else if (this.state.gameState == 1) {
             // Professor selection screen
-            let playerString = this.state.playerTurn;
 
-            if (playerString === "player1")
-            {playerString = <font color="blue"><b> Player 1</b></font>;}
-            else
-            {playerString = <font color="red"><b> Player 2</b></font>;}
-
-            let selectingCon = <span>{playerString} is choosing their Professor</span>;
-
-            let playerLength = 0;
+            let selectingCon = <span>{playerString} is choosing their Professor.</span>;
 
             if (this.state.playerTurn === "player1")
-            {playerLength = this.state.player1.length;}
+                {playerLength = this.state.player1.length;}
             else
-            {playerLength = this.state.player2.length;}
+                {playerLength = this.state.player2.length;}
 
             if (this.state.playerTurn === this.player) {
                 if (playerLength === 0) {
@@ -432,7 +416,7 @@ class Battle extends React.Component {
 
         else if (this.state.gameState == 2) {
 
-            let fightCon = <span>{this.state.playerTurn} is choosing his/her Action</span>;
+            let fightCon = <span>{playerString} is choosing their action</span>;
             let attackBtn = "";
             let swapBtn = "";
             // if (this.player === this.state.playerTurn && this.player !== "watcher" ){
@@ -443,6 +427,10 @@ class Battle extends React.Component {
             let display1 = "";
             let display2 = "";
             let backup = "";
+
+            if (this.state.playerTurn === this.player) {
+                fightCon = <span>{playerString}, select your action!</span>;
+            }
 
 
             if (this.player === "player1"){
