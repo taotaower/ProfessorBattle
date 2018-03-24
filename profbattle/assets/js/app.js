@@ -78,7 +78,7 @@ function form_init() {
     });
 
 
-    $('.phrase').delay(1000).fadeOut();
+
 
 }
 

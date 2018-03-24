@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Button} from 'reactstrap';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 export default function run_game(root, channel) {
     ReactDOM.render(<Battle channel={channel}/>, root);
@@ -19,7 +20,33 @@ class Display extends React.Component {
 
         this.prof = props.prof;
         this.instr = props.instr;
+        this.phrase = props.phrase;
+        this.action = props.action;
+        this.renderPhrase = this.renderPhrase.bind(this);
+        console.log(this.phrase)
 
+
+    }
+
+    renderPhrase(){
+        if (this.action ===""){
+            return
+        }
+        if (this.action === "swap"){
+            return <div class="alert alert-info phrase" role="alert">
+                <text>{this.phrase}</text>
+
+            </div>}
+        else{
+            return <div class="alert alert-danger phrase" role="alert">
+                <text>{this.phrase}</text>
+            </div>
+        }
+
+    }
+
+    dismissPhrs (){
+        $('.phrase').delay(1000).fadeOut();
     }
 
 
@@ -29,7 +56,7 @@ class Display extends React.Component {
         if (this.instr){
             instruct = <h4 style={{position:"relative",top:"50px"}} >What will Professor {this.prof.name} do ?</h4>
         }
-
+        $('.phrase').delay(1500).fadeOut();
         return (
 
             <div class="container" style={{
@@ -37,8 +64,13 @@ class Display extends React.Component {
 
             }}>
                 <h3>{this.prof.name}</h3>
-                <div class="card w-50">
-
+                <div className={"row"}>
+                <div className={"col-4"}>
+                    <img src= {this.prof.pic} width={"128"}/>
+                </div>
+                <div className={"col-8"}>
+                        {this.renderPhrase()}
+                </div>
                 </div>
                 <div>
                     <p>HP</p>
@@ -46,7 +78,6 @@ class Display extends React.Component {
                         <div class="progress-bar bg-success" role="progressbar" aria-valuenow= {this.prof.hp}
                              aria-valuemin="0" aria-valuemax="100" style={{width: this.prof.hp + "%"}}></div>
                     </div>
-
                     <p>Anger</p>
 
                     <div class="progress">
@@ -58,37 +89,14 @@ class Display extends React.Component {
                 </div>
 
                 {instruct}
+
             </div>
+
         );
     }
 }
 
-// class AttackBtn extends React.Component {
-//
-//     constructor(props) {
-//         super(props);
-//
-//         this.channel = props.channel;
-//
-//         this.attackAction = this.attackAction.bind(this);
-//     }
-//     attackAction() {
-//
-//         this.channel.push("attack", {})
-//
-//     }
-//
-//
-//     render() {
-//
-//         return (
-//             <div class="justify-content-center">
-//
-//                 <div class="btn-group" role="group" aria-label="player1 commands">
-//                     <button type="button" class="btn btn-secondary">ATTACK</button>
-//         );
-//     }
-// }
+
 
 
 class SelectProf extends React.Component {
@@ -166,7 +174,7 @@ class BackupProf extends React.Component {
         return profs.map((prof, index) => {
             let selRadio = <input type="radio" name={"swapProf"} value={index} onClick={() => this.chooseProf(index)}/>;
             if (prof.status === "offline"){
-                selRadio = "";
+                selRadio = <p></p>;
             }
             return (
                 <div className={"col-5"}>
@@ -277,8 +285,8 @@ class Battle extends React.Component {
         this.state = {};
         this.showSwapPad = this.showSwapPad.bind(this);
         this.renderButtons = this.renderButtons.bind(this);
-        this.renderOpenPhrs = this.renderOpenPhrs.bind(this);
         this.attackAction = this.attackAction.bind(this);
+
         this.channel.join()
             .receive("ok", this.gotView.bind(this))
             .receive("error", resp => {
@@ -328,32 +336,6 @@ class Battle extends React.Component {
             return null;
         }
     }
-
-    renderOpenPhrs(){
-            if (this.player === "player2"){
-                return <div className={"row phrase"}>
-                    <div class="alert alert-info col " role="alert">
-                        {this.state.openPhrase2}
-                    </div>
-                    <div class="alert alert-info col " role="alert">
-                        {this.state.openPhrase1}
-                    </div>
-                </div>
-
-
-            }
-            else{
-                return <div className={"row phrase"}>
-                    <div class="alert alert-info col " role="alert">
-                        {this.state.openPhrase1}
-                    </div>
-                    <div class="alert alert-info col " role="alert">
-                        {this.state.openPhrase2}
-                    </div>
-                </div>
-
-            }
-        }
 
 
 
@@ -437,11 +419,14 @@ class Battle extends React.Component {
                 display1 = <Display
                            key = {this.state.round}
                            prof = {this.state.player1[0]}
-                           instr = {true}/>;
+                           instr = {true}
+                           phrase = {this.state.phrase1}
+                           action ={this.state.player1Action}/>;
                 display2 = <Display
                     key = {this.state.round}
                            prof = {this.state.player2[0]}
-                           />;
+                    phrase = {this.state.phrase2}
+                    action ={this.state.player2Action}/>;
 
                 backup =  <div id={"backup"} > <BackupProf
                     key = {this.state.round}
@@ -453,10 +438,14 @@ class Battle extends React.Component {
                 display1 = <Display
                     key = {this.state.round}
                     prof = {this.state.player2[0]}
-                    instr = {true}/>;
+                    instr = {true}
+                    phrase = {this.state.phrase2}
+                    action ={this.state.player2Action}/>;
                 display2 = <Display
                     key = {this.state.round}
                     prof = {this.state.player1[0]}
+                    phrase ={this.state.phrase1}
+                    action ={this.state.player1Action}
                     />;
 
                 backup =  <div id={"backup"} > <BackupProf
@@ -468,10 +457,14 @@ class Battle extends React.Component {
             else {
                 display1 = <Display
                     key = {this.state.round}
-                    prof = {this.state.player1[0]}/>;
+                    prof = {this.state.player1[0]}
+                    phrase ={this.state.phrase1}
+                    action ={this.state.player1Action}/>;
                 display2 = <Display
                     key = {this.state.round}
                     prof = {this.state.player2[0]}
+                    phrase ={this.state.phrase2}
+                    action ={this.state.player2Action}
                 />;
             }
 
@@ -482,7 +475,7 @@ class Battle extends React.Component {
                     <div class="alert alert-dark" role="alert">
                         {fightCon}
                     </div>
-                    {this.renderOpenPhrs()}
+                    {/*{this.renderOpenPhrs()}*/}
                     <div className={"row"}>
 
                         <div className={"col"}>

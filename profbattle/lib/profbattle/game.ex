@@ -49,11 +49,17 @@ defmodule Profbattle.Game do
     profNumPlayer1 = game.profNumPlayer1
     profNumPlayer2 = game.profNumPlayer2
     state = game.gameState
+    player1Action = ""
+    player2Action = ""
+    phrase1 = ""
+    phrase2 = ""
     msg = ""
     if playerTurn == "player1" do
       msg = "player1 attacks player2"
       attackProf = List.first(playerOneTeam)
       defenseProf = List.first(playerTwoTeam)
+      player1Action = "attack"
+      phrase1 = getAttackPhrase(attackProf.id)
       hp = calAttack(attackProf,defenseProf)
       if hp <= 0 do
         profNumPlayer2 = profNumPlayer2 - 1
@@ -77,6 +83,8 @@ defmodule Profbattle.Game do
       msg = "player2 attacks player1"
       attackProf = List.first(playerTwoTeam)
       defenseProf = List.first(playerOneTeam)
+      player2Action = "attack"
+      phrase2 = getAttackPhrase(attackProf.id)
       hp = calAttack(attackProf,defenseProf)
       if hp <= 0 do
         profNumPlayer1 = profNumPlayer1 - 1
@@ -96,21 +104,21 @@ defmodule Profbattle.Game do
         playerOneTeam = updateHP(defenseProf,playerOneTeam)
       end
 
-
-
     end
 
 
     %{
       gameState: state,
-      round: (game.round + 1), #delete maybe
+      round: (game.round + 1),
       playerTurn: nextPlayer(playerTurn),
-      player1: playerOneTeam, #{prof1: #{prof: 1, hp:100, sp: 100}}
+      player1: playerOneTeam,
       player2: playerTwoTeam,
-      player1Action: "",
-      player2Action: "",
+      player1Action: player1Action,
+      player2Action: player2Action,
       profNumPlayer1: profNumPlayer1,
       profNumPlayer2: profNumPlayer2,
+      phrase1: phrase1,
+      phrase2: phrase2,
       phrase: "",
       msg: msg,
     }
@@ -157,16 +165,20 @@ def swap(playerTeam,number,prof) do
     playerTwoTeam = game.player2
     profNumPlayer1 = game.profNumPlayer1
     profNumPlayer2 = game.profNumPlayer2
-    openPhrase1 = ""
-    openPhrase2 = ""
+    phrase1 = ""
+    phrase2 = ""
     msg = ""
+    player1Action = ""
+    player2Action = ""
     if playerTurn == "player1" do
 
       playerOneTeam = swap(playerOneTeam,profNumPlayer1,prof)
-      openPhrase1 = getTeamOpen(playerOneTeam)
+      phrase1 = getTeamOpen(playerOneTeam)
+      player1Action = "swap"
      else
       playerTwoTeam = swap(playerTwoTeam,profNumPlayer2,prof)
-      openPhrase2 = getTeamOpen(playerTwoTeam)
+      phrase2 = getTeamOpen(playerTwoTeam)
+      player2Action = "swap"
 
     end
 
@@ -176,12 +188,12 @@ def swap(playerTeam,number,prof) do
       playerTurn: nextPlayer(playerTurn),
       player1: playerOneTeam,
       player2: playerTwoTeam,
-      player1Action: "",
-      player2Action: "",
+      player1Action: player1Action,
+      player2Action: player2Action,
       profNumPlayer1: profNumPlayer1,
       profNumPlayer2: profNumPlayer2,
-      openPhrase1: openPhrase1,
-      openPhrase2: openPhrase2,
+      phrase1: phrase1,
+      phrase2: phrase2,
       phrase: "",
       msg: msg,
     }
@@ -237,10 +249,10 @@ def swap(playerTeam,number,prof) do
     gameState = game.gameState
     gameProfs = game.profs
     if playerTurn == "player1" do
-       playerOneTeam = playerOneTeam ++ [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: (profNumPlayer1+1), special: false, name: getName(prof) }]
+       playerOneTeam = playerOneTeam ++ [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: (profNumPlayer1+1), special: false, name: getName(prof), pic: getPic(prof) }]
        profNumPlayer1 = profNumPlayer1 + 1
     else
-      playerTwoTeam = playerTwoTeam ++ [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: (profNumPlayer2+1), special: false, name: getName(prof) }]
+      playerTwoTeam = playerTwoTeam ++ [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: (profNumPlayer2+1), special: false, name: getName(prof), pic: getPic(prof) }]
       profNumPlayer2 = profNumPlayer2 + 1
     end
 
@@ -248,8 +260,8 @@ def swap(playerTeam,number,prof) do
     gameProfs = List.replace_at(gameProfs, prof, updateProf)
 
     if (profNumPlayer1 + profNumPlayer2) == 6 do
-      openPhrase1 = getTeamOpen(playerOneTeam)
-      openPhrase2 =  getTeamOpen(playerTwoTeam)
+      phrase1 = getTeamOpen(playerOneTeam)
+      phrase2 =  getTeamOpen(playerTwoTeam)
 
 
       %{
@@ -258,12 +270,12 @@ def swap(playerTeam,number,prof) do
         playerTurn: nextPlayer(playerTurn),
         player1: playerOneTeam,
         player2: playerTwoTeam,
-        player1Action: "",
-        player2Action: "",
+        player1Action: "swap",
+        player2Action: "swap",
         profNumPlayer1: profNumPlayer1,
         profNumPlayer2: profNumPlayer2,
-        openPhrase1: openPhrase1,
-        openPhrase2: openPhrase2,
+        phrase1: phrase1,
+        phrase2: phrase2,
         msg: "",
       }
 
@@ -342,9 +354,16 @@ def swap(playerTeam,number,prof) do
   end
 
 
+  def getAttackPhrase(id) do
+    Enum.fetch!(profsPhrase(),id).attackPhrase
+                 |>Enum.shuffle()
+                 |>List.first()
+  end
 
 
-
+  def getPic(id) do
+    Enum.fetch!(profs(),id).pic.unselected
+  end
 
 
 
@@ -500,9 +519,14 @@ def swap(playerTeam,number,prof) do
     special = Enum.fetch!(profs(),defenseProf.id).special
 
     anger = anger + (special * 20)
-    #50
 
+    if anger > 100 do
+      anger = 100
+    end
+
+    anger
   end
+
 
   # input [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: 0, special: false}]
   # input [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: 0, special: false}]
