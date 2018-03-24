@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Button} from 'reactstrap';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+
 
 export default function run_game(root, channel) {
     ReactDOM.render(<Battle channel={channel}/>, root);
