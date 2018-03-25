@@ -67,15 +67,19 @@ defmodule Profbattle.Game do
       player1Action = "attack"
       phrase1 = getAttackPhrase(attackProf.id)
       oldHp =defenseProf.hp
-
       if special do
+        # attack prof do a special
         hp = calSpecialAttack(attackProf,defenseProf)
         playerOneTeam = updateTeam(cancelSpecial(attackProf),playerOneTeam)
+        phrase1= "<b>" + defenseProf.name + "</b>" + specialPhrs(attackProf.skill)
+        defenseProf = Map.put(defenseProf,:status, attackProf.skill)
         else
         hp = calAttack(attackProf,defenseProf)
       end
-
       if hp <= 0 do
+        # defenseProf hp <= 0
+        player1Action = "win"
+        phrase1 = getWinPhrase(attackProf.id)
         profNumPlayer2 = profNumPlayer2 - 1
         defenseProf = Map.put(defenseProf,:status, "offline")
         defenseProf = Map.put(defenseProf,:hp, 0)
@@ -87,6 +91,7 @@ defmodule Profbattle.Game do
           playerTwoTeam = offSwap(playerTwoTeam,profNumPlayer2)
         end
       else
+        # defenseProf hp > 0
         anger = getAngry(defenseProf,(hp - oldHp))
         if anger >= 100 do
           defenseProf = Map.put(defenseProf,:special, true)
@@ -95,7 +100,6 @@ defmodule Profbattle.Game do
         defenseProf = Map.put(defenseProf,:anger, anger)
         playerTwoTeam = updateTeam(defenseProf,playerTwoTeam)
       end
-
       else
       msg = "player2 attacks player1"
       attackProf = List.first(playerTwoTeam)
@@ -104,24 +108,30 @@ defmodule Profbattle.Game do
       phrase2 = getAttackPhrase(attackProf.id)
       oldHp =defenseProf.hp
       if special do
+        # attack prof do a special
         hp = calSpecialAttack(attackProf,defenseProf)
-        attackProf = Map.put(attackProf,:anger, 0)
-        attackProf = Map.put(attackProf,:special, false)
-        playerTwoTeam = updateTeam(attackProf,playerTwoTeam)
+        playerTwoTeam = updateTeam(cancelSpecial(attackProf),playerTwoTeam)
+        phrase2= "<b>" + defenseProf.name + "</b>" + specialPhrs(attackProf.skill)
+        defenseProf = Map.put(defenseProf,:status, attackProf.skill)
       else
         hp = calAttack(attackProf,defenseProf)
       end
       if hp <= 0 do
+        # defenseProf hp <= 0
+        player2Action = "win"
+        phrase2 = getWinPhrase(attackProf.id)
         profNumPlayer1 = profNumPlayer1 - 1
-        playerOneTeam = updateTeam(cancelSpecial(attackProf),playerOneTeam)
+        defenseProf = Map.put(defenseProf,:status, "offline")
+        defenseProf = Map.put(defenseProf,:hp, 0)
+        playerOneTeam = updateTeam(defenseProf,playerOneTeam)
         if profNumPlayer1 == 0 do
           msg = "Player2 wins "
           state = 3
         else
           playerOneTeam = offSwap(playerOneTeam,profNumPlayer1)
         end
-
       else
+        # defenseProf hp > 0
         anger = getAngry(defenseProf,(hp - oldHp))
         if anger >= 100 do
           defenseProf = Map.put(defenseProf,:special, true)
@@ -250,9 +260,17 @@ def swap(playerTeam,number,prof) do
   def escape(team1,team2) do
     speed1 = Enum.fetch!(profs(),List.first(team1).id).speed
     speed2 = Enum.fetch!(profs(),List.first(team2).id).speed
-    chance = Enum.shuffle([true,false])
-             |>List.first()
-    speed1 > speed2 || chance
+    chance = true
+
+    if speed1 > speed2 do
+      chance = Enum.shuffle([true,false,true,true])
+               |>List.first()
+      else
+      chance = Enum.shuffle([true,false])
+               |>List.first()
+    end
+
+    chance
   end
 
 
@@ -288,10 +306,10 @@ def swap(playerTeam,number,prof) do
     gameState = game.gameState
     gameProfs = game.profs
     if playerTurn == "player1" do
-       playerOneTeam = playerOneTeam ++ [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: (profNumPlayer1+1), special: false, name: getName(prof), pic: getPic(prof) }]
+       playerOneTeam = playerOneTeam ++ [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: (profNumPlayer1+1), special: false, name: getName(prof), pic: getPic(prof),skill: getSkill(prof)}]
        profNumPlayer1 = profNumPlayer1 + 1
     else
-      playerTwoTeam = playerTwoTeam ++ [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: (profNumPlayer2+1), special: false, name: getName(prof), pic: getPic(prof) }]
+      playerTwoTeam = playerTwoTeam ++ [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: (profNumPlayer2+1), special: false, name: getName(prof), pic: getPic(prof), skill: getSkill(prof) }]
       profNumPlayer2 = profNumPlayer2 + 1
     end
 
@@ -348,22 +366,22 @@ def swap(playerTeam,number,prof) do
     [
       %{id: 0, name: "clinger", hp: 3.63, attack: 4.05, defense: 3.95, speed: 3.61, special: 5.60,
         pic: %{unselected: "/images/Clinger.jpg", selected: "/images/Clinger-grey.jpg",
-          oneSelected: "/images/Clinger-blue-grey.jpg", twoSelected: "/images/Clinger-red-grey.jpg"}, selected: false},
+          oneSelected: "/images/Clinger-blue-grey.jpg", twoSelected: "/images/Clinger-red-grey.jpg"}, selected: false , skill: "Afraid"},
       %{id: 1, name: "tuck", hp: 4.37, attack: 3.43, defense: 4.53, speed: 4.23, special: 4.27,
         pic: %{unselected: "/images/Tuck.jpg", selected: "/images/Tuck-grey.jpg",
-          oneSelected: "/images/Tuck-blue-grey.jpg", twoSelected: "/images/Tuck-red-grey.jpg"},selected: false},
+          oneSelected: "/images/Tuck-blue-grey.jpg", twoSelected: "/images/Tuck-red-grey.jpg"},selected: false, skill: "Confusion"},
       %{id: 2, name: "platt", hp: 3.93, attack: 3.83, defense: 4.17, speed: 4.25, special: 3.57,
         pic: %{unselected: "/images/Platt.jpg", selected: "/images/Platt-grey.jpg",
-          oneSelected: "/images/Platt-blue-grey.jpg", twoSelected: "/images/Platt-red-grey.jpg"},selected: false},
+          oneSelected: "/images/Platt-blue-grey.jpg", twoSelected: "/images/Platt-red-grey.jpg"},selected: false, skill: "Asleep"},
       %{id: 3, name: "young", hp: 4.78, attack: 3.42, defense: 4.84, speed: 4.83, special: 3.00,
         pic: %{unselected: "/images/Young.jpg", selected: "/images/Young-grey.jpg",
-          oneSelected: "/images/Young-blue-grey.jpg", twoSelected: "/images/Young-red-grey.jpg"},selected: false},
+          oneSelected: "/images/Young-blue-grey.jpg", twoSelected: "/images/Young-red-grey.jpg"},selected: false, skill: "Confusion"},
       %{id: 4, name: "weintraub", hp: 3.90, attack: 4.75, defense: 4.27, speed: 3.87, special: 4.76,
         pic: %{unselected: "/images/Michael.jpg", selected: "/images/Michael-grey.jpg",
-          oneSelected: "/images/Michael-blue-grey.jpg", twoSelected: "/images/Michael-red-grey.jpg"},selected: false},
+          oneSelected: "/images/Michael-blue-grey.jpg", twoSelected: "/images/Michael-red-grey.jpg"},selected: false, skill: "Afraid"},
       %{id: 5, name: "derbinsky", hp: 4.73, attack: 3.90, defense: 4.73, speed: 4.58, special: 3.40,
         pic: %{unselected: "/images/nate.jpg", selected: "/images/nate-grey.jpg",
-          oneSelected: "/images/nate-blue-grey.jpg", twoSelected: "/images/nate-red-grey.jpg"},selected: false},
+          oneSelected: "/images/nate-blue-grey.jpg", twoSelected: "/images/nate-red-grey.jpg"},selected: false, skill: "Asleep"},
     ]
   end
 
@@ -379,6 +397,23 @@ def swap(playerTeam,number,prof) do
       %{id: 5, openPhrase: "I'm Nate, not Nat", winPhrase: "Any questions so far?" ,attackPhrase: ["You are stuck here, Wohahahaha","I have no idea when the class ends"]},
     ]
 
+  end
+
+
+  def specialPhrs(skill)do
+    phrs = ""
+
+    if skill == "Afraid" do
+      phrs = "  is afraid!  He quivers in fear!"
+    end
+    if skill == "Confusion" do
+      phrs = "  is confused!! He hurts himself in his confusion!"
+    end
+    if skill == "Asleep" do
+      phrs = "  fell asleep!"
+    end
+
+    phrs
   end
 
   def caughtPhrase() do
@@ -414,6 +449,10 @@ def swap(playerTeam,number,prof) do
                  |>List.first()
   end
 
+  def getWinPhrase(id) do
+    Enum.fetch!(profsPhrase(),id).winPhrase
+  end
+
 
   def getPic(id) do
     Enum.fetch!(profs(),id).pic.unselected
@@ -423,7 +462,9 @@ def swap(playerTeam,number,prof) do
     Enum.fetch!(profs(),id).name
   end
 
-
+  def getSkill(id) do
+    Enum.fetch!(profs(),id).skill
+  end
 
 
 
@@ -475,7 +516,7 @@ def swap(playerTeam,number,prof) do
       bonusDamage = attack + 1 - defense
     end
 
-    hp = hp - (25 + (bonusDamage * 10))
+    hp = hp - (10 + (bonusDamage * 10))
     
 
   end

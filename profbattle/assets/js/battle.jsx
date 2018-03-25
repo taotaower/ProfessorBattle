@@ -86,9 +86,8 @@ class Display extends React.Component {
                     <div class="progress">
                         <div class="progress-bar bg-danger progress-bar-striped" role="progressbar" style={{width: this.prof.anger + "%"}}
                              aria-valuenow = {this.prof.anger} aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-
-
+                    </div >
+                    <div style={{position:"relative",top:"20px"}}><font color="maroon"><b> Status: </b></font> {this.prof.status}</div>
                 </div>
 
                 {instruct}
@@ -274,6 +273,7 @@ class Prof extends React.Component {
                 <div><b>Defense:</b> {this.prof.defense}</div>
                 <div><b>Speed:</b> {this.prof.speed}</div>
                 <div><b>Special:</b> {this.prof.special}</div>
+                <div><b>Skill:</b> {this.prof.skill}</div>
             </div>
         );
     }
