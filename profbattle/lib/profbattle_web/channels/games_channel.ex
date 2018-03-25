@@ -41,7 +41,13 @@ defmodule ProfbattleWeb.GamesChannel do
     game = Profbattle.GameBackup.load(name)
 
     game = Game.attackAction(game,special)
-    Profbattle.GameBackup.save(socket.assigns[:name], game)
+
+    if game.gameState == 3 do
+      Profbattle.GameBackup.delete(socket.assigns[:name])
+    else
+      Profbattle.GameBackup.save(socket.assigns[:name], game)
+    end
+
     socket = assign(socket, :game, game)
 
     broadcast! socket, "update", %{game: game}

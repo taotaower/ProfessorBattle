@@ -24,8 +24,6 @@ class Display extends React.Component {
         this.action = props.action;
         this.renderPhrase = this.renderPhrase.bind(this);
 
-
-
     }
 
     renderPhrase(){
@@ -54,8 +52,6 @@ class Display extends React.Component {
         }
 
     }
-
-
 
     render() {
 
@@ -364,10 +360,7 @@ class Battle extends React.Component {
             return null;
         }
     }
-
-
-
-
+    
     render() {
 
         let playerString = this.state.playerTurn;
@@ -438,9 +431,11 @@ class Battle extends React.Component {
             let display2 = "";
             let backup = "";
             let special = false;
+            let instr = false;
 
             if (this.state.playerTurn === this.player) {
                 fightCon = <span>{playerString}, select your action!</span>;
+                instr = true;
             }
 
 
@@ -449,7 +444,7 @@ class Battle extends React.Component {
                 display1 = <Display
                            key = {this.state.round}
                            prof = {this.state.player1[0]}
-                           instr = {true}
+                           instr = {instr}
                            phrase = {this.state.phrase1}
                            action ={this.state.player1Action}/>;
                 display2 = <Display
@@ -469,7 +464,7 @@ class Battle extends React.Component {
                 display1 = <Display
                     key = {this.state.round}
                     prof = {this.state.player2[0]}
-                    instr = {true}
+                    instr = {instr}
                     phrase = {this.state.phrase2}
                     action ={this.state.player2Action}/>;
                 display2 = <Display

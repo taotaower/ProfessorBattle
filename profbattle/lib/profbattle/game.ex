@@ -475,7 +475,7 @@ def swap(playerTeam,number,prof) do
       bonusDamage = attack + 1 - defense
     end
 
-    hp = hp - (10 + (bonusDamage * 10))
+    hp = hp - (25 + (bonusDamage * 10))
     
 
   end

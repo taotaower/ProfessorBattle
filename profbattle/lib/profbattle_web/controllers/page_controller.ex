@@ -8,8 +8,6 @@ defmodule ProfbattleWeb.PageController do
              |> List.first()
              |> Enum.map(fn(x) -> stateConvert(x) end)
 
-
-
     render conn, "index.html",states: states
   end
 
@@ -23,10 +21,8 @@ defmodule ProfbattleWeb.PageController do
     name = List.first(state)  # get name
     state = List.last(state) # get number of players
 
-
-
     %{
-    name: name,
+      name: name,
       state: state.gameState
     }
 

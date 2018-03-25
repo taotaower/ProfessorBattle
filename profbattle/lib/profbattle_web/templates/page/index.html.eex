@@ -4,67 +4,65 @@
 
     <div >
 
-      <p>Enter Name of Game to Create a New Game</p>
-      <p><input type="text" id="game-input"></p>
-      <button id="submit-name">Create Game</button>
+    <p>Enter Name of Game to Create a New Game</p>
+    <p><input type="text" id="game-input"></p>
+    <button id="submit-name">Create Game</button>
 
     </div>
 
 
     <p>-------------------------------------------------------------------</p>
 
-    <div>
 
+    <div>
 
     <p>Game in the Playground</p>
 
     <table class="table">
-      <thead>
-            <tr class="row">
-              <th class="col-6">Game Name</th>
-              <th class="col-2">Status</th>
-              <th class="col-4"></th>
-            </tr>
-      </thead>
 
- <tbody id="game-table">
-    <%= for state <- @states do %>
+        <thead>
+        <tr class="row">
+        <th class="col-6">Game Name</th>
+        <th class="col-2">Status</th>
+        <th class="col-4"></th>
+        </tr>
+        </thead>
 
-    <tr class="row">
+        <tbody id="game-table">
+        <%= for state <- @states do %>
+        <tr class="row">
+        <td class="col-6"><%= state.name %></td>
 
-    <td class="col-6"><%= state.name %></td>
-
-               <%= if state.state == 0 do %>
-                  <td class="col-2">Waiting</td>
-               <% end %>
-                <%= if state.state == 1 do %>
-                  <td class="col-2">Selecting Professors</td>
-                <% end %>
-                                <%= if state.state == 2 do %>
-                                  <td class="col-2">Playing</td>
-                                <% end %>
-                           <%= if state.state == 3 do %>
-                                  <td class="col-2">Game over</td>
-                                <% end %>
-
-
-                              <%= if state.state == 0 do %>
-
-
-                       <td class="col-4">
-                         <button class="btn btn-primary btn-join" value="<%= state.name%>">Join</button>
-                         </td>
-            <% else %>
-           <td class="col-4"> <button class="btn btn-success btn-watch" value="<%= state.name%>">Watch</button></td>
+            <%= if state.state == 0 do %>
+              <td class="col-2">Waiting</td>
             <% end %>
 
+            <%= if state.state == 1 do %>
+              <td class="col-2">Selecting Professors</td>
+            <% end %>
 
-    </tr>
-    <% end %>
+            <%= if state.state == 2 do %>
+              <td class="col-2">Playing</td>
+            <% end %>
 
-  </tbody>
+            <%= if state.state == 3 do %>
+              <td class="col-2">Game over</td>
+            <% end %>
 
-</table>
-  </div>
+            <%= if state.state == 0 do %>
+              <td class="col-4">
+              <button class="btn btn-primary btn-join" value="<%= state.name%>">Join</button>
+              </td>
+            <% else %>
+              <td class="col-4"> <button class="btn btn-success btn-watch" value="<%= state.name%>">Watch</button></td>
+            <% end %>
+
+        </tr>
+        <% end %>
+        </tbody>
+
+    </table>
+
+    </div>
 
 </div>
