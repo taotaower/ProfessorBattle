@@ -77,13 +77,13 @@ class Display extends React.Component {
                 <div>
                     <p>HP</p>
                     <div class="progress">
-                        <div class="progress-bar bg-success" role="progressbar" aria-valuenow= {this.prof.hp}
+                        <div class="progress-bar bg-success progress-bar-striped" role="progressbar" aria-valuenow= {this.prof.hp}
                              aria-valuemin="0" aria-valuemax="100" style={{width: this.prof.hp + "%"}}></div>
                     </div>
                     <p>Anger</p>
 
                     <div class="progress">
-                        <div class="progress-bar bg-danger" role="progressbar" style={{width: this.prof.anger + "%"}}
+                        <div class="progress-bar bg-danger progress-bar-striped" role="progressbar" style={{width: this.prof.anger + "%"}}
                              aria-valuenow = {this.prof.anger} aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
 
@@ -288,6 +288,7 @@ class Battle extends React.Component {
         this.showSwapPad = this.showSwapPad.bind(this);
         this.renderButtons = this.renderButtons.bind(this);
         this.attackAction = this.attackAction.bind(this);
+        this.specialAttackAction = this.specialAttackAction.bind(this);
 
         this.channel.join()
             .receive("ok", this.gotView.bind(this))
@@ -319,21 +320,34 @@ class Battle extends React.Component {
     }
 
     attackAction(){
-        this.channel.push("attack", {})
+        this.channel.push("attack", {special: false})
     }
 
-    renderButtons() {
-        if (this.player === this.state.playerTurn && this.player !== "watcher" ) {
-            return  <div id={"action-btns"} class="btn-group btn-group-lg" role="group" aria-label="Basic example" style={{position:"relative",top:"100px", left:"20px"}}>
+    specialAttackAction(){
+        this.channel.push("attack", {special: true})
+    }
 
+    renderButtons(special) {
+        let specialBtn = <button id={"special-attack-btn"} className={"btn btn-danger btn-lg"} onClick={this.attackAction} disabled={true}><b>Special Attack</b></button>;
+        if (special){
+            specialBtn = <button id={"special-attack-btn"} className={"btn btn-danger btn-lg"} onClick={this.specialAttackAction}><b>Special Attack</b></button>;
+        }
+
+        if (this.player === this.state.playerTurn && this.player !== "watcher" ) {
+            return <div id={"action-btns"}>
+                <div  class="btn-group btn-group-lg" role="group" aria-label="Basic example" style={{position:"relative",top:"100px", left:"20px"}}>
                 <div >
                     <button id={"attack-btn"} className={"btn btn-info"} onClick={this.attackAction}>Attack</button>
                 </div>
-
                 <div >
                     <button id={"swap-btn"} className={"btn btn-warning"} onClick={this.showSwapPad}>Swap</button>
                 </div>
             </div>
+                <div style={{position:"relative", top:"50px", left:"300px"}}>
+                    {specialBtn}
+            </div>
+            </div>
+
         } else {
             return null;
         }
@@ -411,6 +425,7 @@ class Battle extends React.Component {
             let display1 = "";
             let display2 = "";
             let backup = "";
+            let special = false;
 
             if (this.state.playerTurn === this.player) {
                 fightCon = <span>{playerString}, select your action!</span>;
@@ -418,6 +433,7 @@ class Battle extends React.Component {
 
 
             if (this.player === "player1"){
+                special = this.state.player1[0].special;
                 display1 = <Display
                            key = {this.state.round}
                            prof = {this.state.player1[0]}
@@ -437,6 +453,7 @@ class Battle extends React.Component {
                     channel = {this.channel}/></div>;
             }
             else if(this.player === "player2") {
+                special = this.state.player2[0].special;
                 display1 = <Display
                     key = {this.state.round}
                     prof = {this.state.player2[0]}
@@ -491,7 +508,7 @@ class Battle extends React.Component {
                     <div className={"row"}>
 
                         <div className={"col"}>
-                        {this.renderButtons()}
+                        {this.renderButtons(special)}
 
                         </div>
 
@@ -509,7 +526,7 @@ class Battle extends React.Component {
         }
 
         else if (this.state.gameState == 3) {
-            // Game over screen
+            <h1>{this.state.msg}</h1>
         }
 
         else {

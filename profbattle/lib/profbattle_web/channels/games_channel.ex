@@ -36,11 +36,11 @@ defmodule ProfbattleWeb.GamesChannel do
     {:noreply, socket}
   end
 
-  def handle_in("attack", %{}, socket) do
+  def handle_in("attack", %{"special" => special}, socket) do
     name = socket.assigns[:name]
     game = Profbattle.GameBackup.load(name)
 
-    game = Game.attackAction(game)
+    game = Game.attackAction(game,special)
     Profbattle.GameBackup.save(socket.assigns[:name], game)
     socket = assign(socket, :game, game)
 

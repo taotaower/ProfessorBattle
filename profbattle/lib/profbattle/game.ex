@@ -35,14 +35,20 @@ defmodule Profbattle.Game do
 
   end
 
-  def updateHP(defenseProf,playerTwoTeam) do
+  def updateTeam(defenseProf,playerTwoTeam) do
 
     List.replace_at(playerTwoTeam, 0, defenseProf)
 
   end
 
 
-  def attackAction(game) do
+  def cancelSpecial(attackProf) do
+    attackProf = attackProf
+                 |> Map.put(:anger, 0)
+                 |> Map.put(:special, false)
+
+  end
+  def attackAction(game,special) do
     playerTurn = game.playerTurn
     playerOneTeam = game.player1
     playerTwoTeam = game.player2
@@ -60,23 +66,33 @@ defmodule Profbattle.Game do
       defenseProf = List.first(playerTwoTeam)
       player1Action = "attack"
       phrase1 = getAttackPhrase(attackProf.id)
-      hp = calAttack(attackProf,defenseProf)
+
+      if special do
+        hp = calSpecialAttack(attackProf,defenseProf)
+        playerOneTeam = updateTeam(cancelSpecial(attackProf),playerOneTeam)
+        else
+        hp = calAttack(attackProf,defenseProf)
+      end
+
       if hp <= 0 do
         profNumPlayer2 = profNumPlayer2 - 1
         defenseProf = Map.put(defenseProf,:status, "offline")
         defenseProf = Map.put(defenseProf,:hp, 0)
-        playerTwoTeam = updateHP(defenseProf,playerTwoTeam)
+        playerTwoTeam = updateTeam(defenseProf,playerTwoTeam)
         if profNumPlayer2 == 0 do
           msg = "player1 wins"
           state = 3
           else
           playerTwoTeam = offSwap(playerTwoTeam,profNumPlayer2)
         end
-
       else
-
+        anger = getAngry(defenseProf)
+        if anger >= 100 do
+          defenseProf = Map.put(defenseProf,:special, true)
+        end
         defenseProf = Map.put(defenseProf,:hp, hp)
-        playerTwoTeam = updateHP(defenseProf,playerTwoTeam)
+        defenseProf = Map.put(defenseProf,:anger, anger)
+        playerTwoTeam = updateTeam(defenseProf,playerTwoTeam)
       end
 
       else
@@ -85,12 +101,17 @@ defmodule Profbattle.Game do
       defenseProf = List.first(playerOneTeam)
       player2Action = "attack"
       phrase2 = getAttackPhrase(attackProf.id)
-      hp = calAttack(attackProf,defenseProf)
+      if special do
+        hp = calSpecialAttack(attackProf,defenseProf)
+        attackProf = Map.put(attackProf,:anger, 0)
+        attackProf = Map.put(attackProf,:special, false)
+        playerTwoTeam = updateTeam(attackProf,playerTwoTeam)
+      else
+        hp = calAttack(attackProf,defenseProf)
+      end
       if hp <= 0 do
         profNumPlayer1 = profNumPlayer1 - 1
-        defenseProf = Map.put(defenseProf,:status, "offline")
-        defenseProf = Map.put(defenseProf,:hp, 0)
-        playerOneTeam = updateHP(defenseProf,playerOneTeam)
+        playerOneTeam = updateTeam(cancelSpecial(attackProf),playerOneTeam)
         if profNumPlayer1 == 0 do
           msg = "Player2 wins "
           state = 3
@@ -99,9 +120,13 @@ defmodule Profbattle.Game do
         end
 
       else
-
+        anger = getAngry(defenseProf)
+        if anger >= 100 do
+          defenseProf = Map.put(defenseProf,:special, true)
+        end
         defenseProf = Map.put(defenseProf,:hp, hp)
-        playerOneTeam = updateHP(defenseProf,playerOneTeam)
+        defenseProf = Map.put(defenseProf,:anger, anger)
+        playerOneTeam = updateTeam(defenseProf,playerOneTeam)
       end
 
     end
@@ -150,10 +175,7 @@ def swap(playerTeam,number,prof) do
     [second,first,third]
 
     end
-
-
-
-
+    
   end
   # when call swap current prof will go to the last position, selected prof should go to first
 
@@ -321,10 +343,10 @@ def swap(playerTeam,number,prof) do
   def profs() do
     # define profs' info here
     [
-      %{id: 0, name: "clinger", hp: 3.63, attack: 4.05, defense: 3.95, speed: 3.61, special: 5.00,
+      %{id: 0, name: "clinger", hp: 3.63, attack: 4.05, defense: 3.95, speed: 3.61, special: 5.60,
         pic: %{unselected: "/images/Clinger.jpg", selected: "/images/Clinger-grey.jpg",
           oneSelected: "/images/Clinger-blue-grey.jpg", twoSelected: "/images/Clinger-red-grey.jpg"}, selected: false},
-      %{id: 1, name: "tuck", hp: 4.37, attack: 3.43, defense: 4.53, speed: 4.23, special: 4.07,
+      %{id: 1, name: "tuck", hp: 4.37, attack: 3.43, defense: 4.53, speed: 4.23, special: 4.27,
         pic: %{unselected: "/images/Tuck.jpg", selected: "/images/Tuck-grey.jpg",
           oneSelected: "/images/Tuck-blue-grey.jpg", twoSelected: "/images/Tuck-red-grey.jpg"},selected: false},
       %{id: 2, name: "platt", hp: 3.93, attack: 3.83, defense: 4.17, speed: 4.25, special: 3.57,
@@ -385,20 +407,27 @@ def swap(playerTeam,number,prof) do
 
 
   def caughtPhrase() do
-    Enum.shuffle(["Oops, I get caught....","OMG, Just Let me go!"])
+    Enum.shuffle(["Oops, I get caught....","Literally, I don't wanna play this game....","OMG, Just Let me go!"])
     |>List.first()
     end
 
 
 
 
+  def calSpecialAttack(attackProf,defenseProf) do
+    attack = Enum.fetch!(profs(),attackProf.id).attack
+    defense = Enum.fetch!(profs(),defenseProf.id).defense
+    hp = defenseProf.hp
 
+    bonusDamage = 0
 
+    if (attack + 1 - defense) > 0 do
+      bonusDamage = attack + 1 - defense
+    end
 
+    hp = hp - (15 + (bonusDamage * 15))
 
-
-
-
+  end
 
 
 
@@ -407,7 +436,7 @@ def swap(playerTeam,number,prof) do
     anger = defenseProf.anger
     special = Enum.fetch!(profs(),defenseProf.id).special
 
-    anger = anger + (special * 20)
+    anger = anger + (special * 6)
 
     if anger > 100 do
       anger = 100
@@ -426,12 +455,12 @@ def swap(playerTeam,number,prof) do
 
     bonusDamage = 0
 
-    if (attack - defense) > 0 do
-      bonusDamage = attack - defense
+    if (attack + 1 - defense) > 0 do
+      bonusDamage = attack + 1 - defense
     end
 
-    hp = hp - (20 + (bonusDamage * 10))
-    #50
+    hp = hp - (10 + (bonusDamage * 10))
+    
 
   end
 
@@ -439,8 +468,7 @@ def swap(playerTeam,number,prof) do
   def getHp(prof) do
     hp = Enum.fetch!(profs(),prof).hp
 
-    # use hp above to cal a initial HP for prof
-    100
+    86 + ((hp - 3.63) * 13 )
 
   end
 

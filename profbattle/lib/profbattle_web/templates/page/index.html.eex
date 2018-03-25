@@ -43,10 +43,12 @@
                                 <%= if state.state == 2 do %>
                                   <td class="col-2">Playing</td>
                                 <% end %>
+                           <%= if state.state == 3 do %>
+                                  <td class="col-2">Game over</td>
+                                <% end %>
 
 
-
-           <%= if state.state == 0 do %>
+                              <%= if state.state == 0 do %>
 
 
                        <td class="col-4">
