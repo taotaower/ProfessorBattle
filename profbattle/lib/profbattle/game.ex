@@ -71,7 +71,7 @@ defmodule Profbattle.Game do
         # attack prof do a special
         hp = calSpecialAttack(attackProf,defenseProf)
         playerOneTeam = updateTeam(cancelSpecial(attackProf),playerOneTeam)
-        phrase1= "<b>" + defenseProf.name + "</b>" + specialPhrs(attackProf.skill)
+        phrase1= List.to_string([defenseProf.name , specialPhrs(attackProf.skill)])
         defenseProf = Map.put(defenseProf,:status, attackProf.skill)
         else
         hp = calAttack(attackProf,defenseProf)
@@ -111,7 +111,7 @@ defmodule Profbattle.Game do
         # attack prof do a special
         hp = calSpecialAttack(attackProf,defenseProf)
         playerTwoTeam = updateTeam(cancelSpecial(attackProf),playerTwoTeam)
-        phrase2= "<b>" + defenseProf.name + "</b>" + specialPhrs(attackProf.skill)
+        phrase2=  List.to_string([ defenseProf.name , specialPhrs(attackProf.skill)])
         defenseProf = Map.put(defenseProf,:status, attackProf.skill)
       else
         hp = calAttack(attackProf,defenseProf)

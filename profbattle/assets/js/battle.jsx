@@ -59,7 +59,7 @@ class Display extends React.Component {
         if (this.instr){
             instruct = <h4 style={{position:"relative",top:"50px"}} >What will Professor {this.prof.name} do ?</h4>
         }
-        $('.phrase').delay(1800).fadeOut();
+        $('.phrase').delay(2000).fadeOut();
         return (
 
             <div class="container" style={{
