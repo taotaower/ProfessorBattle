@@ -61,6 +61,22 @@ defmodule ProfbattleWeb.GamesChannel do
     {:noreply, socket}
   end
 
+
+  def handle_in("coffee", %{}, socket) do
+    name = socket.assigns[:name]
+    game = Profbattle.GameBackup.load(name)
+
+    game = Game.coffeeAction(game)
+    Profbattle.GameBackup.save(socket.assigns[:name], game)
+    socket = assign(socket, :game, game)
+
+    broadcast! socket, "update", %{game: game}
+    {:noreply, socket}
+  end
+
+
+
+
   # Add authorization logic here as required.
   defp authorized?(_payload) do
     true

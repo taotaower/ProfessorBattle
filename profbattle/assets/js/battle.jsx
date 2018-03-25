@@ -42,6 +42,11 @@ class Display extends React.Component {
                 <text>{this.phrase}</text>
             </div>
         }
+        else if(this.action === "coffee"){
+            return <div class="alert alert-success phrase" role="alert">
+                <text>{this.phrase}</text>
+            </div>
+        }
         else {
             return <div class="alert alert-warning phrase" role="alert">
                 <text>{this.phrase}</text>
@@ -185,8 +190,8 @@ class BackupProf extends React.Component {
                     <div><b>{prof.name}</b></div>
                     <div><p></p></div>
                     <div><p></p></div>
-                    <div><b>HP:</b> {prof.hp}</div>
-                    <div><b>Anger:</b> {prof.anger}</div>
+                    <div><b>HP:</b> {Math.round(prof.hp)}</div>
+                    <div><b>Anger:</b> {Math.round(prof.anger)}</div>
                     <div><b>Status:</b> {prof.status}</div>
                     <div><p></p></div>
                     <div><p></p></div>
@@ -289,6 +294,7 @@ class Battle extends React.Component {
         this.renderButtons = this.renderButtons.bind(this);
         this.attackAction = this.attackAction.bind(this);
         this.specialAttackAction = this.specialAttackAction.bind(this);
+        this.coffeeAction = this.coffeeAction.bind(this);
 
         this.channel.join()
             .receive("ok", this.gotView.bind(this))
@@ -318,6 +324,9 @@ class Battle extends React.Component {
 
 
     }
+    coffeeAction(){
+        this.channel.push("coffee", {})
+    }
 
     attackAction(){
         this.channel.push("attack", {special: false})
@@ -328,9 +337,11 @@ class Battle extends React.Component {
     }
 
     renderButtons(special) {
-        let specialBtn = <button id={"special-attack-btn"} className={"btn btn-danger btn-lg"} onClick={this.attackAction} disabled={true}><b>Special Attack</b></button>;
+        let specialBtn = <button id={"special-attack-btn"} className={"btn btn-danger btn-lg"}  disabled={true}><b>Special Attack</b></button>;
+        let coffeeBtn = <button id={"coffee-btn"} className={"btn btn-light btn-lg"}  disabled={true}><b>Ice Coffee</b></button>;
         if (special){
             specialBtn = <button id={"special-attack-btn"} className={"btn btn-danger btn-lg"} onClick={this.specialAttackAction}><b>Special Attack</b></button>;
+            coffeeBtn = <button id={"coffee-btn"} className={"btn btn-light btn-lg"} onClick={this.coffeeAction}><b>Ice Coffee</b></button>;
         }
 
         if (this.player === this.state.playerTurn && this.player !== "watcher" ) {
@@ -343,8 +354,9 @@ class Battle extends React.Component {
                     <button id={"swap-btn"} className={"btn btn-warning"} onClick={this.showSwapPad}>Swap</button>
                 </div>
             </div>
-                <div style={{position:"relative", top:"50px", left:"300px"}}>
+                <div className={"btn-group btn-group-lg"} role="group" style={{position:"relative", top:"100px", left:"100px"}}>
                     {specialBtn}
+                    {coffeeBtn}
             </div>
             </div>
 
@@ -526,7 +538,8 @@ class Battle extends React.Component {
         }
 
         else if (this.state.gameState == 3) {
-            <h1>{this.state.msg}</h1>
+            return (
+            <h1>{this.state.msg}</h1>)
         }
 
         else {

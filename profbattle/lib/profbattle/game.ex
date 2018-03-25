@@ -66,6 +66,7 @@ defmodule Profbattle.Game do
       defenseProf = List.first(playerTwoTeam)
       player1Action = "attack"
       phrase1 = getAttackPhrase(attackProf.id)
+      oldHp =defenseProf.hp
 
       if special do
         hp = calSpecialAttack(attackProf,defenseProf)
@@ -86,7 +87,7 @@ defmodule Profbattle.Game do
           playerTwoTeam = offSwap(playerTwoTeam,profNumPlayer2)
         end
       else
-        anger = getAngry(defenseProf)
+        anger = getAngry(defenseProf,(hp - oldHp))
         if anger >= 100 do
           defenseProf = Map.put(defenseProf,:special, true)
         end
@@ -101,6 +102,7 @@ defmodule Profbattle.Game do
       defenseProf = List.first(playerOneTeam)
       player2Action = "attack"
       phrase2 = getAttackPhrase(attackProf.id)
+      oldHp =defenseProf.hp
       if special do
         hp = calSpecialAttack(attackProf,defenseProf)
         attackProf = Map.put(attackProf,:anger, 0)
@@ -120,7 +122,7 @@ defmodule Profbattle.Game do
         end
 
       else
-        anger = getAngry(defenseProf)
+        anger = getAngry(defenseProf,(hp - oldHp))
         if anger >= 100 do
           defenseProf = Map.put(defenseProf,:special, true)
         end
@@ -276,9 +278,6 @@ def swap(playerTeam,number,prof) do
     }
   end
 
-  def getName(id) do
-    Enum.fetch!(profs(),id).name
-  end
 
   def selectProf(game,prof) do
     playerTurn = game.playerTurn
@@ -300,6 +299,10 @@ def swap(playerTeam,number,prof) do
     gameProfs = List.replace_at(gameProfs, prof, updateProf)
 
     if (profNumPlayer1 + profNumPlayer2) == 6 do
+      playerOneTeam = playerOneTeam
+                      |> Enum.shuffle()
+      playerTwoTeam = playerTwoTeam
+                      |> Enum.shuffle()
       phrase1 = getTeamOpen(playerOneTeam)
       phrase2 =  getTeamOpen(playerTwoTeam)
 
@@ -378,6 +381,17 @@ def swap(playerTeam,number,prof) do
 
   end
 
+  def caughtPhrase() do
+    Enum.shuffle(["Oops, I get caught....","Literally, I don't wanna play this game....","OMG, Just Let me go!"])
+    |>List.first()
+  end
+
+  def coffeePhrase() do
+    Enum.shuffle(["Handle me cold brew, please....","Black ice coffee brings me to life","Ice Latte, please!"])
+    |>List.first()
+  end
+
+
   def initplayerTurn() do
     Enum.shuffle(["player1","player2"])
           |>List.first()
@@ -405,11 +419,12 @@ def swap(playerTeam,number,prof) do
     Enum.fetch!(profs(),id).pic.unselected
   end
 
+  def getName(id) do
+    Enum.fetch!(profs(),id).name
+  end
 
-  def caughtPhrase() do
-    Enum.shuffle(["Oops, I get caught....","Literally, I don't wanna play this game....","OMG, Just Let me go!"])
-    |>List.first()
-    end
+
+
 
 
 
@@ -418,6 +433,7 @@ def swap(playerTeam,number,prof) do
     attack = Enum.fetch!(profs(),attackProf.id).attack
     defense = Enum.fetch!(profs(),defenseProf.id).defense
     hp = defenseProf.hp
+    attackerHp = attackProf.hp
 
     bonusDamage = 0
 
@@ -425,18 +441,18 @@ def swap(playerTeam,number,prof) do
       bonusDamage = attack + 1 - defense
     end
 
-    hp = hp - (15 + (bonusDamage * 15))
+    hp = hp - (10 + (bonusDamage * 15) + (100 - attackerHp) * 0.1)
 
   end
 
 
 
   # input [%{id: prof, hp: getHp(prof), anger: 0, status: "active", seq: 0, special: false}]
-  def getAngry(defenseProf) do
+  def getAngry(defenseProf,hpchange) do
     anger = defenseProf.anger
     special = Enum.fetch!(profs(),defenseProf.id).special
 
-    anger = anger + (special * 6)
+    anger = anger + (special * 6) + (hpchange / 3)
 
     if anger > 100 do
       anger = 100
@@ -469,6 +485,66 @@ def swap(playerTeam,number,prof) do
     hp = Enum.fetch!(profs(),prof).hp
 
     86 + ((hp - 3.63) * 13 )
+
+  end
+
+  def addHP(prof) do
+    hp = prof.hp * 1.8
+
+    if hp > 100 do
+      hp = 100
+    end
+
+    newProf = prof
+             |> Map.put(:anger, 0)
+             |> Map.put(:special, false)
+             |> Map.put(:hp, hp)
+
+  end
+
+
+  def coffeeAction(game) do
+    playerTurn = game.playerTurn
+    player1Action = ""
+    player2Action = ""
+    phrase1 = ""
+    phrase2 = ""
+    playerOneTeam = game.player1
+    playerTwoTeam = game.player2
+    if playerTurn == "player1" do
+
+      prof = playerOneTeam
+             |> List.first()
+             |> addHP()
+      playerOneTeam = updateTeam(prof,playerOneTeam)
+      phrase1 = coffeePhrase()
+      player1Action = "coffee"
+      else
+      prof = playerTwoTeam
+             |> List.first()
+             |> addHP()
+      playerTwoTeam = updateTeam(prof,playerTwoTeam)
+      phrase2 = coffeePhrase()
+      player2Action = "coffee"
+      end
+
+
+    %{
+      gameState: game.gameState,
+      round: (game.round + 1),
+      playerTurn: nextPlayer(playerTurn),
+      player1: playerOneTeam,
+      player2: playerTwoTeam,
+      player1Action: player1Action,
+      player2Action: player2Action,
+      profNumPlayer1: game.profNumPlayer1,
+      profNumPlayer2: game.profNumPlayer2,
+      phrase1: phrase1,
+      phrase2: phrase2,
+      phrase: "",
+      msg: "",
+    }
+
 
   end
 
