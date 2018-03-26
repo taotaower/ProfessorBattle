@@ -687,8 +687,8 @@ def swap(playerTeam,number,prof) do
       defense = defense * 0.75
     end
 
-    if (attack + 0.5 - defense) > 0 do
-      bonusDamage = attack + 0.5 - defense
+    if (attack + 1- defense) > 0 do
+      bonusDamage = attack + 1 - defense
     end
 
     hp = hp - (10 + (bonusDamage * 10))
@@ -709,8 +709,8 @@ def swap(playerTeam,number,prof) do
       defense = defense * 0.75
     end
 
-    if (attack + 0.5 - defense) > 0 do
-      bonusDamage = attack + 0.5 - defense
+    if (attack + 1 - defense) > 0 do
+      bonusDamage = attack + 1 - defense
     end
 
     hp = hp - (15 + (bonusDamage * 10) + (100 - attackerHp) * 0.1)
