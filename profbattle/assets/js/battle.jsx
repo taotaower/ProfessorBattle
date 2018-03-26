@@ -294,6 +294,7 @@ class Battle extends React.Component {
         this.specialAttackAction = this.specialAttackAction.bind(this);
         this.coffeeAction = this.coffeeAction.bind(this);
         this.sleepAction = this.sleepAction.bind(this);
+        // this.countDown = this.countDown.bind(this);
 
         this.channel.join()
             .receive("ok", this.gotView.bind(this))
@@ -342,6 +343,30 @@ class Battle extends React.Component {
     sleepAction(){
         this.channel.push("sleep", {})
     }
+    //
+    // countDown(time){
+    //
+    //     function startTimer(duration, display) {
+    //         let that = this;
+    //         setInterval(function () {
+    //
+    //             duration = parseInt(duration) - 1;
+    //             if (duration < 0) {
+    //                 duration = 0;
+    //                 this.channel.push("sleep", {})
+    //             }
+    //
+    //             display.text(duration);
+    //
+    //
+    //         }, 1000);
+    //     }
+    //
+    //     let timer = $("#time");
+    //     startTimer(time, timer);
+    //
+    //     return <div><b><span id="time">time</span></b> second(s) left for making action</div>
+    // }
 
 
     renderButtons(special,status) {
@@ -396,7 +421,7 @@ class Battle extends React.Component {
     render() {
 
         let playerString = this.state.playerTurn;
-        let playerLength = 0
+        let playerLength = 0;
 
         if (playerString === "player1")
             {playerString = <font color="blue"><b> Player 1</b></font>;}
@@ -550,6 +575,7 @@ class Battle extends React.Component {
                 <div>
                     <div class="alert alert-dark" role="alert">
                         {fightCon}
+                        {/*{this.countDown(15)}*/}
                     </div>
                     {/*{this.renderOpenPhrs()}*/}
                     <div className={"row"}>
