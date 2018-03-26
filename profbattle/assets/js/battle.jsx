@@ -188,6 +188,7 @@ class BackupProf extends React.Component {
                     <div><b>HP:</b> {Math.round(prof.hp)}</div>
                     <div><b>Anger:</b> {Math.round(prof.anger)}</div>
                     <div><b>Status:</b> {prof.status}</div>
+                    <div><b>skill:</b> {prof.skill}</div>
                     <div><p></p></div>
                     <div><p></p></div>
                 </label>

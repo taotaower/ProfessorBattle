@@ -742,12 +742,12 @@ def swap(playerTeam,number,prof) do
   def getHp(prof) do
     hp = Enum.fetch!(profs(),prof).hp
 
-    90 + ((hp - 3.63) * 13 )
+    100 + ((hp - 3.63) * 13 )
 
   end
 
   def addHP(prof) do
-    hp = prof.hp * 1.7
+    hp = prof.hp + 25
 
     if hp > 100 do
       hp = 100
