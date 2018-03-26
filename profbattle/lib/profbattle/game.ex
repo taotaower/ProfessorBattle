@@ -583,10 +583,10 @@ def swap(playerTeam,number,prof) do
           oneSelected: "/images/Young-blue-grey.jpg", twoSelected: "/images/Young-red-grey.jpg"},selected: false, skill: "Confusion"},#Confusion
       %{id: 4, name: "weintraub", hp: 3.90, attack: 4.75, defense: 4.27, speed: 3.87, special: 4.76,
         pic: %{unselected: "/images/Michael.jpg", selected: "/images/Michael-grey.jpg",
-          oneSelected: "/images/Michael-blue-grey.jpg", twoSelected: "/images/Michael-red-grey.jpg"},selected: false, skill: "Afraid"},#Afraid
+          oneSelected: "/images/Michael-blue-grey.jpg", twoSelected: "/images/Michael-red-grey.jpg"},selected: false, skill: "Asleep"},#Asleep
       %{id: 5, name: "derbinsky", hp: 4.73, attack: 3.90, defense: 4.73, speed: 4.58, special: 3.40,
         pic: %{unselected: "/images/nate.jpg", selected: "/images/nate-grey.jpg",
-          oneSelected: "/images/nate-blue-grey.jpg", twoSelected: "/images/nate-red-grey.jpg"},selected: false, skill: "Asleep"},#Asleep
+          oneSelected: "/images/nate-blue-grey.jpg", twoSelected: "/images/nate-red-grey.jpg"},selected: false, skill: "Afraid"},#Afraid
     ]
   end
 

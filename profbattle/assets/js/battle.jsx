@@ -365,6 +365,7 @@ class Battle extends React.Component {
             attackBtn = <button id={"attack-btn"} className={"btn btn-info"} onClick={this.attackAction} disabled={true}>Attack</button>;
             specialBtn = <button id={"special-attack-btn"} className={"btn btn-danger btn-lg"}  disabled={true}><b>Special Attack !</b></button>;
             skipBtn = <button id={"skip-btn"} className={"btn btn-success"} onClick={this.sleepAction}>Sleep Over it</button>;
+            swapBtn = <button id={"swap-btn"} className={"btn btn-warning"} onClick={this.showSwapPad} disabled={true}>Swap</button>;
 
         }
 
@@ -451,7 +452,7 @@ class Battle extends React.Component {
                             <li>When professor does special attack, he will give his enemy a special status</li>
                             <li>When professor is confused, he will attack himself, cannot swap and do special attack</li>
                             <li>When professor is afraid, his defense will decrease</li>
-                            <li>When professor is asleep, cannot do anything, but swap ,sleep, and drink coffee</li>
+                            <li>When professor is sleepy, cannot do anything, but sleep, and drink coffee</li>
                             <li>Coffee will bring professor back to normal status, and recover HP</li>
                         </ul>
 
