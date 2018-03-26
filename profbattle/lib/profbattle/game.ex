@@ -687,8 +687,8 @@ def swap(playerTeam,number,prof) do
       defense = defense * 0.75
     end
 
-    if (attack + 1 - defense) > 0 do
-      bonusDamage = attack + 1 - defense
+    if (attack + 0.5 - defense) > 0 do
+      bonusDamage = attack + 0.5 - defense
     end
 
     hp = hp - (10 + (bonusDamage * 10))
@@ -709,8 +709,8 @@ def swap(playerTeam,number,prof) do
       defense = defense * 0.75
     end
 
-    if (attack + 1 - defense) > 0 do
-      bonusDamage = attack + 1 - defense
+    if (attack + 0.5 - defense) > 0 do
+      bonusDamage = attack + 0.5 - defense
     end
 
     hp = hp - (15 + (bonusDamage * 10) + (100 - attackerHp) * 0.1)
@@ -724,7 +724,7 @@ def swap(playerTeam,number,prof) do
     anger = defenseProf.anger
     special = Enum.fetch!(profs(),defenseProf.id).special
 
-    anger = anger + (special * 6) + (hpchange / 2) + 5
+    anger = anger + (special * 7) + (hpchange / 2) + 5
 
     if anger > 100 do
       anger = 100
