@@ -426,7 +426,6 @@ def swap(playerTeam,number,prof) do
     else
       prof = playerTwoTeam
              |> List.first()
-             |> addHP()
       prof = Map.put(prof,:status, "active")
       playerTwoTeam = updateTeam(prof,playerTwoTeam)
       phrase2 = sleepPhrase()
@@ -572,19 +571,19 @@ def swap(playerTeam,number,prof) do
     [
       %{id: 0, name: "clinger", hp: 3.63, attack: 4.05, defense: 3.95, speed: 3.61, special: 5.60,
         pic: %{unselected: "/images/Clinger.jpg", selected: "/images/Clinger-grey.jpg",
-          oneSelected: "/images/Clinger-blue-grey.jpg", twoSelected: "/images/Clinger-red-grey.jpg"}, selected: false , skill: "Asleep"}, #Afraid
+          oneSelected: "/images/Clinger-blue-grey.jpg", twoSelected: "/images/Clinger-red-grey.jpg"}, selected: false , skill: "Afraid"}, #Afraid
       %{id: 1, name: "tuck", hp: 4.37, attack: 3.43, defense: 4.53, speed: 4.23, special: 4.27,
         pic: %{unselected: "/images/Tuck.jpg", selected: "/images/Tuck-grey.jpg",
-          oneSelected: "/images/Tuck-blue-grey.jpg", twoSelected: "/images/Tuck-red-grey.jpg"},selected: false, skill: "Asleep"}, #Confusion
+          oneSelected: "/images/Tuck-blue-grey.jpg", twoSelected: "/images/Tuck-red-grey.jpg"},selected: false, skill: "Confusion"}, #Confusion
       %{id: 2, name: "platt", hp: 3.93, attack: 3.83, defense: 4.17, speed: 4.25, special: 3.57,
         pic: %{unselected: "/images/Platt.jpg", selected: "/images/Platt-grey.jpg",
           oneSelected: "/images/Platt-blue-grey.jpg", twoSelected: "/images/Platt-red-grey.jpg"},selected: false, skill: "Asleep"},#Asleep
       %{id: 3, name: "young", hp: 4.78, attack: 3.42, defense: 4.84, speed: 4.83, special: 3.00,
         pic: %{unselected: "/images/Young.jpg", selected: "/images/Young-grey.jpg",
-          oneSelected: "/images/Young-blue-grey.jpg", twoSelected: "/images/Young-red-grey.jpg"},selected: false, skill: "Asleep"},#Confusion
+          oneSelected: "/images/Young-blue-grey.jpg", twoSelected: "/images/Young-red-grey.jpg"},selected: false, skill: "Confusion"},#Confusion
       %{id: 4, name: "weintraub", hp: 3.90, attack: 4.75, defense: 4.27, speed: 3.87, special: 4.76,
         pic: %{unselected: "/images/Michael.jpg", selected: "/images/Michael-grey.jpg",
-          oneSelected: "/images/Michael-blue-grey.jpg", twoSelected: "/images/Michael-red-grey.jpg"},selected: false, skill: "Asleep"},#Afraid
+          oneSelected: "/images/Michael-blue-grey.jpg", twoSelected: "/images/Michael-red-grey.jpg"},selected: false, skill: "Afraid"},#Afraid
       %{id: 5, name: "derbinsky", hp: 4.73, attack: 3.90, defense: 4.73, speed: 4.58, special: 3.40,
         pic: %{unselected: "/images/nate.jpg", selected: "/images/nate-grey.jpg",
           oneSelected: "/images/nate-blue-grey.jpg", twoSelected: "/images/nate-red-grey.jpg"},selected: false, skill: "Asleep"},#Asleep
@@ -714,7 +713,7 @@ def swap(playerTeam,number,prof) do
       bonusDamage = attack + 1 - defense
     end
 
-    hp = hp - (10 + (bonusDamage * 15) + (100 - attackerHp) * 0.1)
+    hp = hp - (15 + (bonusDamage * 10) + (100 - attackerHp) * 0.1)
 
   end
 
