@@ -349,7 +349,7 @@ class Battle extends React.Component {
         let coffeeBtn = <button id={"coffee-btn"} className={"btn btn-light btn-lg"}  disabled={true}><b>Ice Coffee</b></button>;
         let attackBtn = <button id={"attack-btn"} className={"btn btn-info"} onClick={this.attackAction}>Attack</button>;
         let swapBtn = <button id={"swap-btn"} className={"btn btn-warning"} onClick={this.showSwapPad}>Swap</button>;
-        let skipBtn = ""
+        let skipBtn = "";
         if (special){
             specialBtn = <button id={"special-attack-btn"} className={"btn btn-danger btn-lg"} onClick={this.specialAttackAction}><b>Special Attack !</b></button>;
             coffeeBtn = <button id={"coffee-btn"} className={"btn btn-light btn-lg"} onClick={this.coffeeAction}><b>Ice Coffee</b></button>;
@@ -443,6 +443,19 @@ class Battle extends React.Component {
                                 playerTurn = {this.state.playerTurn}
                                 player1 = {this.state.player1}
                                 player2 = {this.state.player2}/>
+
+                    <div style={{position:"relative",top:"20px", left:"20px"}}>
+                        <h3>Tips: </h3>
+                        <ul style={{type: "list-style-type:disc"}}>
+                            <li>Professor with higher speed, will have higher chance to escape</li>
+                            <li>When professor does special attack, he will give his enemy a special status</li>
+                            <li>When professor is confused, he will attack himself, cannot swap and do special attack</li>
+                            <li>When professor is afraid, his defense will decrease</li>
+                            <li>When professor is asleep, cannot do anything, but swap ,sleep, and drink coffee</li>
+                            <li>Coffee will bring professor back to normal status, and recover HP</li>
+                        </ul>
+
+                    </div>
                 </div>
             )
 
