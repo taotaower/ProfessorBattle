@@ -568,8 +568,11 @@ class Battle extends React.Component {
         }
 
         else if (this.state.gameState == 3) {
-            return (
-            <h1>{this.state.msg}</h1>)
+            return (<div>
+                    <h1><b>GAME OVER</b></h1>
+                    <h2>{this.state.msg}</h2>
+                   </div>
+            )
         }
 
         else {
