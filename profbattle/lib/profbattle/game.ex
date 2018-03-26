@@ -316,6 +316,13 @@ def swap(playerTeam,number,prof) do
     if playerTurn == "player1" do
 
       if escape(playerOneTeam,playerTwoTeam) do
+
+        profLeft = playerOneTeam
+               |> List.first()
+               |> addHP(10)
+
+        playerOneTeam = updateTeam(profLeft,playerOneTeam)
+
         playerOneTeam = swap(playerOneTeam,profNumPlayer1,prof)
         player1Action = "swap"
         phrase1 = getTeamOpen(playerOneTeam)
@@ -327,6 +334,12 @@ def swap(playerTeam,number,prof) do
      else
 
       if escape(playerTwoTeam,playerOneTeam) do
+
+        profLeft = playerTwoTeam
+                   |> List.first()
+                   |> addHP(10)
+        playerTwoTeam = updateTeam(profLeft,playerTwoTeam)
+
         playerTwoTeam = swap(playerTwoTeam,profNumPlayer2,prof)
         phrase2 = getTeamOpen(playerTwoTeam)
         player2Action = "swap"
@@ -369,7 +382,7 @@ def swap(playerTeam,number,prof) do
 
       prof = playerOneTeam
              |> List.first()
-             |> addHP()
+             |> addHP(25)
       prof = Map.put(prof,:status, "active")
       playerOneTeam = updateTeam(prof,playerOneTeam)
       phrase1 = coffeePhrase()
@@ -377,7 +390,7 @@ def swap(playerTeam,number,prof) do
     else
       prof = playerTwoTeam
              |> List.first()
-             |> addHP()
+             |> addHP(25)
       prof = Map.put(prof,:status, "active")
       playerTwoTeam = updateTeam(prof,playerTwoTeam)
       phrase2 = coffeePhrase()
@@ -691,7 +704,7 @@ def swap(playerTeam,number,prof) do
       bonusDamage = attack + 1 - defense
     end
 
-    hp = hp - (15 + (bonusDamage * 7))
+    hp = hp - (15 + (bonusDamage * 10))
 
 
   end
@@ -713,7 +726,7 @@ def swap(playerTeam,number,prof) do
       bonusDamage = attack + 1 - defense
     end
 
-    hp = hp - (20 + (bonusDamage * 7) + (100 - attackerHp) * 0.1)
+    hp = hp - (20 + (bonusDamage * 10) + (100 - attackerHp) * 0.1)
 
   end
 
@@ -742,12 +755,12 @@ def swap(playerTeam,number,prof) do
   def getHp(prof) do
     hp = Enum.fetch!(profs(),prof).hp
 
-    100 + ((hp - 3.63) * 13 )
+    95 + ((hp - 3.63) * 13 )
 
   end
 
-  def addHP(prof) do
-    hp = prof.hp + 25
+  def addHP(prof,amount) do
+    hp = prof.hp + amount
 
     if hp > 100 do
       hp = 100
