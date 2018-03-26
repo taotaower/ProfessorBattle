@@ -577,10 +577,10 @@ def swap(playerTeam,number,prof) do
           oneSelected: "/images/Tuck-blue-grey.jpg", twoSelected: "/images/Tuck-red-grey.jpg"},selected: false, skill: "Confusion"}, #Confusion
       %{id: 2, name: "platt", hp: 3.93, attack: 3.83, defense: 4.17, speed: 4.25, special: 3.57,
         pic: %{unselected: "/images/Platt.jpg", selected: "/images/Platt-grey.jpg",
-          oneSelected: "/images/Platt-blue-grey.jpg", twoSelected: "/images/Platt-red-grey.jpg"},selected: false, skill: "Asleep"},#Asleep
+          oneSelected: "/images/Platt-blue-grey.jpg", twoSelected: "/images/Platt-red-grey.jpg"},selected: false, skill: "Confusion"},#Confusion
       %{id: 3, name: "young", hp: 4.78, attack: 3.42, defense: 4.84, speed: 4.83, special: 3.00,
         pic: %{unselected: "/images/Young.jpg", selected: "/images/Young-grey.jpg",
-          oneSelected: "/images/Young-blue-grey.jpg", twoSelected: "/images/Young-red-grey.jpg"},selected: false, skill: "Confusion"},#Confusion
+          oneSelected: "/images/Young-blue-grey.jpg", twoSelected: "/images/Young-red-grey.jpg"},selected: false, skill: "Asleep"},#Asleep
       %{id: 4, name: "weintraub", hp: 3.90, attack: 4.75, defense: 4.27, speed: 3.87, special: 4.76,
         pic: %{unselected: "/images/Michael.jpg", selected: "/images/Michael-grey.jpg",
           oneSelected: "/images/Michael-blue-grey.jpg", twoSelected: "/images/Michael-red-grey.jpg"},selected: false, skill: "Asleep"},#Asleep
@@ -691,7 +691,7 @@ def swap(playerTeam,number,prof) do
       bonusDamage = attack + 1 - defense
     end
 
-    hp = hp - (10 + (bonusDamage * 10))
+    hp = hp - (15 + (bonusDamage * 7))
 
 
   end
@@ -713,7 +713,7 @@ def swap(playerTeam,number,prof) do
       bonusDamage = attack + 1 - defense
     end
 
-    hp = hp - (15 + (bonusDamage * 10) + (100 - attackerHp) * 0.1)
+    hp = hp - (20 + (bonusDamage * 7) + (100 - attackerHp) * 0.1)
 
   end
 
