@@ -54,6 +54,25 @@ defmodule ProfbattleWeb.GamesChannel do
     {:noreply, socket}
   end
 
+
+  def handle_in("selfAttack", %{}, socket) do
+    name = socket.assigns[:name]
+    game = Profbattle.GameBackup.load(name)
+
+    game = Game.selfAttackAction(game)
+
+    if game.gameState == 3 do
+      Profbattle.GameBackup.delete(socket.assigns[:name])
+    else
+      Profbattle.GameBackup.save(socket.assigns[:name], game)
+    end
+
+    socket = assign(socket, :game, game)
+
+    broadcast! socket, "update", %{game: game}
+    {:noreply, socket}
+  end
+
   # professor is array location
   def handle_in("swap", %{"professor" => p}, socket) do
     name = socket.assigns[:name]
@@ -80,7 +99,17 @@ defmodule ProfbattleWeb.GamesChannel do
     {:noreply, socket}
   end
 
+  def handle_in("sleep", %{}, socket) do
+    name = socket.assigns[:name]
+    game = Profbattle.GameBackup.load(name)
 
+    game = Game.sleepAction(game)
+    Profbattle.GameBackup.save(socket.assigns[:name], game)
+    socket = assign(socket, :game, game)
+
+    broadcast! socket, "update", %{game: game}
+    {:noreply, socket}
+  end
 
 
   # Add authorization logic here as required.
