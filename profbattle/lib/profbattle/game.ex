@@ -744,7 +744,7 @@ def swap(playerTeam,number,prof) do
     anger = defenseProf.anger
     special = Enum.fetch!(profs(),defenseProf.id).special
 
-    anger = anger + (special * 7) + (hpchange / 2) + 5
+    anger = anger + (special * 10) + (hpchange / 2) + 5
 
     if anger > 100 do
       anger = 100
