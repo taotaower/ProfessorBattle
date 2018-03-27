@@ -39849,7 +39849,7 @@ function form_init() {
 function init() {
     var root = document.getElementById('game');
     if (root) {
-        var channel = _socket2.default.channel("games:" + window.gameName, {});
+        var channel = _socket2.default.channel("games:" + window.gameName, { player: window.player });
         (0, _battle2.default)(root, channel);
     }
 
@@ -39972,6 +39972,8 @@ var Display = function (_React$Component) {
         value: function render() {
 
             var instruct = "";
+            var status = "";
+            var profName = "Professor " + this.prof.name.charAt(0).toUpperCase() + this.prof.name.slice(1);
             if (this.instr) {
                 instruct = _react2.default.createElement(
                     'h4',
@@ -39979,6 +39981,13 @@ var Display = function (_React$Component) {
                     'What will Professor ',
                     this.prof.name,
                     ' do ?'
+                );
+            }
+            if (this.prof.status !== 'active') {
+                status = _react2.default.createElement(
+                    'button',
+                    { type: 'button', 'class': 'btn btn-danger', disabled: true },
+                    this.prof.status
                 );
             }
             $('.phrase').delay(2000).fadeOut();
@@ -39991,7 +40000,7 @@ var Display = function (_React$Component) {
                 _react2.default.createElement(
                     'h3',
                     null,
-                    this.prof.name
+                    profName
                 ),
                 _react2.default.createElement(
                     'div',
@@ -40034,18 +40043,24 @@ var Display = function (_React$Component) {
                     ),
                     _react2.default.createElement(
                         'div',
-                        { style: { position: "relative", top: "20px" } },
-                        _react2.default.createElement(
-                            'font',
-                            { color: 'maroon' },
-                            _react2.default.createElement(
-                                'b',
-                                null,
-                                ' Status: '
-                            )
-                        ),
+                        null,
                         ' ',
-                        this.prof.status
+                        _react2.default.createElement('p', null),
+                        ' '
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        ' ',
+                        _react2.default.createElement('p', null),
+                        ' '
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        ' ',
+                        status,
+                        ' '
                     )
                 ),
                 instruct
@@ -40313,6 +40328,8 @@ var Prof = function (_React$Component4) {
         value: function render() {
             var _this8 = this;
 
+            var profName = this.prof.name.charAt(0).toUpperCase() + this.prof.name.slice(1);
+
             var img = _react2.default.createElement('img', { src: this.prof.pic.unselected, width: "128", style: { cursor: "pointer" },
                 onClick: function onClick() {
                     return _this8.selectProf(_this8.prof.id);
@@ -40344,7 +40361,7 @@ var Prof = function (_React$Component4) {
                     _react2.default.createElement(
                         'b',
                         null,
-                        this.prof.name
+                        profName
                     )
                 ),
                 _react2.default.createElement(
@@ -40778,7 +40795,7 @@ var Battle = function (_React$Component5) {
                         'div',
                         { style: { position: "relative", top: "20px", left: "20px" } },
                         _react2.default.createElement(
-                            'h3',
+                            'h4',
                             null,
                             'Tips: '
                         ),
@@ -40788,32 +40805,51 @@ var Battle = function (_React$Component5) {
                             _react2.default.createElement(
                                 'li',
                                 null,
-                                'Professor with higher speed, will have higher chance to escape'
+                                'Professors with a higher speed will have a higher chance to escape.'
                             ),
                             _react2.default.createElement(
                                 'li',
                                 null,
-                                'When professor does special attack, he will give his enemy a special status'
+                                'When a professor uses his special attack, his rival will receive one of the following status effects:'
+                            ),
+                            _react2.default.createElement(
+                                'ul',
+                                null,
+                                _react2.default.createElement(
+                                    'li',
+                                    null,
+                                    _react2.default.createElement(
+                                        'b',
+                                        null,
+                                        'Confusion:'
+                                    ),
+                                    ' Rival will attack himself in his confusion.'
+                                ),
+                                _react2.default.createElement(
+                                    'li',
+                                    null,
+                                    _react2.default.createElement(
+                                        'b',
+                                        null,
+                                        'Afraid:'
+                                    ),
+                                    ' Rival\'s defense attribute decreases.'
+                                ),
+                                _react2.default.createElement(
+                                    'li',
+                                    null,
+                                    _react2.default.createElement(
+                                        'b',
+                                        null,
+                                        'Asleep:'
+                                    ),
+                                    ' Rival falls asleep and must drink coffee to wake up.'
+                                )
                             ),
                             _react2.default.createElement(
                                 'li',
                                 null,
-                                'When professor is confused, he will attack himself, cannot swap and do special attack'
-                            ),
-                            _react2.default.createElement(
-                                'li',
-                                null,
-                                'When professor is afraid, his defense will decrease'
-                            ),
-                            _react2.default.createElement(
-                                'li',
-                                null,
-                                'When professor is sleepy, cannot do anything, but sleep, and drink coffee'
-                            ),
-                            _react2.default.createElement(
-                                'li',
-                                null,
-                                'Coffee will bring professor back to normal status, and recover HP'
+                                'Drinking coffee will remove any negative status effects and recover some HP.'
                             )
                         )
                     )
@@ -40955,6 +40991,7 @@ var Battle = function (_React$Component5) {
                     )
                 );
             } else if (this.state.gameState == 3) {
+
                 return _react2.default.createElement(
                     'div',
                     null,
@@ -40971,6 +41008,21 @@ var Battle = function (_React$Component5) {
                         'h2',
                         null,
                         this.state.msg
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement('p', null)
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement('p', null)
+                    ),
+                    _react2.default.createElement(
+                        'a',
+                        { href: '/' },
+                        'Return to Game Lobby'
                     )
                 );
             } else {

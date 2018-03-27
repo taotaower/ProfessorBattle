@@ -4,8 +4,13 @@ defmodule ProfbattleWeb.GamesChannel do
   alias Profbattle.Game
 
   def join("games:" <> name, payload, socket) do
+
+
     if authorized?(payload) do
+      IO.inspect "dasdas"
+      IO.inspect payload
       game = Profbattle.GameBackup.load(name)
+
 
       socket = socket
                |> assign(:game, game)
@@ -13,12 +18,14 @@ defmodule ProfbattleWeb.GamesChannel do
 
       if game do
 
-        if game.gameState == 0 do
+        if game.gameState == 0 and Map.fetch!(payload, "player") == "player2" do
           game = Game.addPlayer(game)
         end
 
         else
         game = Game.new()
+        Map.put(socket,:joined, true)
+
       end
 
       Profbattle.GameBackup.save(socket.assigns[:name], game)

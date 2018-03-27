@@ -85,7 +85,7 @@ function form_init() {
 function init() {
     let root = document.getElementById('game');
     if (root) {
-        let channel = socket.channel("games:" + window.gameName, {});
+        let channel = socket.channel("games:" + window.gameName, {player: window.player});
         run_game(root, channel);
     }
 
