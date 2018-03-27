@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export PORT=5105
+export PORT=5101
 export MIX_ENV=prod
 export GIT_PATH=/home/profbattle/src/profbattle 
 
