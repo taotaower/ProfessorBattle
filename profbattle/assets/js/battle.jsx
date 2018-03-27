@@ -56,8 +56,13 @@ class Display extends React.Component {
     render() {
 
         let instruct = "";
+        let status = "";
+        let profName = "Professor " + this.prof.name.charAt(0).toUpperCase() + this.prof.name.slice(1);
         if (this.instr){
             instruct = <h4 style={{position:"relative",top:"50px"}} >What will Professor {this.prof.name} do ?</h4>
+        }
+        if (this.prof.status !== 'active') {
+            status = <button type="button" class="btn btn-danger" disabled>{this.prof.status}</button>
         }
         $('.phrase').delay(2000).fadeOut();
         return (
@@ -66,7 +71,7 @@ class Display extends React.Component {
                 position: 'relative',
 
             }}>
-                <h3>{this.prof.name}</h3>
+                <h3>{profName}</h3>
                 <div className={"row"}>
                 <div className={"col-4"}>
                     <img src= {this.prof.pic} width={"128"}/>
@@ -86,8 +91,10 @@ class Display extends React.Component {
                     <div class="progress">
                         <div class="progress-bar bg-danger progress-bar-striped" role="progressbar" style={{width: this.prof.anger + "%"}}
                              aria-valuenow = {this.prof.anger} aria-valuemin="0" aria-valuemax="100"></div>
-                    </div >
-                    <div style={{position:"relative",top:"20px"}}><font color="maroon"><b> Status: </b></font> {this.prof.status}</div>
+                    </div>
+                    <div> <p></p> </div>
+                    <div> <p></p> </div>
+                    <div> {status} </div>
                 </div>
 
                 {instruct}
@@ -242,6 +249,8 @@ class Prof extends React.Component {
 
     render(){
 
+        let profName = this.prof.name.charAt(0).toUpperCase() + this.prof.name.slice(1);
+
         let img = <img src={this.prof.pic.unselected} width={"128"} style={{cursor: "pointer"}}
                        onClick={() => this.selectProf(this.prof.id)}/>;
 
@@ -265,7 +274,7 @@ class Prof extends React.Component {
 
         return(
             <div className={"col-2"}>
-                <div><b>{this.prof.name}</b></div>
+                <div><b>{profName}</b></div>
                 <div><p></p></div>
                 <div><p></p></div>
                 <div>{img}</div>
@@ -471,14 +480,16 @@ class Battle extends React.Component {
                                 player2 = {this.state.player2}/>
 
                     <div style={{position:"relative",top:"20px", left:"20px"}}>
-                        <h3>Tips: </h3>
+                        <h4>Tips: </h4>
                         <ul style={{type: "list-style-type:disc"}}>
-                            <li>Professor with higher speed, will have higher chance to escape</li>
-                            <li>When professor does special attack, he will give his enemy a special status</li>
-                            <li>When professor is confused, he will attack himself, cannot swap and do special attack</li>
-                            <li>When professor is afraid, his defense will decrease</li>
-                            <li>When professor is sleepy, cannot do anything, but sleep, and drink coffee</li>
-                            <li>Coffee will bring professor back to normal status, and recover HP</li>
+                            <li>Professors with a higher speed will have a higher chance to escape.</li>
+                            <li>When a professor uses his special attack, his rival will receive one of the following status effects:</li>
+                            <ul>
+                                <li><b>Confusion:</b> Rival will attack himself in his confusion.</li>
+                                <li><b>Afraid:</b> Rival's defense attribute decreases.</li>
+                                <li><b>Asleep:</b> Rival falls asleep and must drink coffee to wake up.</li>
+                            </ul>
+                            <li>Drinking coffee will remove any negative status effects and recover some HP.</li>
                         </ul>
 
                     </div>
@@ -609,10 +620,14 @@ class Battle extends React.Component {
         }
 
         else if (this.state.gameState == 3) {
+
             return (<div>
                     <h1><b>GAME OVER</b></h1>
                     <h2>{this.state.msg}</h2>
-                   </div>
+                    <div><p></p></div>
+                    <div><p></p></div>
+                    <a href="/">Return to Game Lobby</a>
+                    </div>
             )
         }
 

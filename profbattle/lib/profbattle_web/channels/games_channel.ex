@@ -130,10 +130,10 @@ defmodule ProfbattleWeb.GamesChannel do
     {:noreply, socket}
   end
 
-  def handle_in("close", %{"professor" => p}, socket) do
+  #def handle_in("close", %{"professor" => p}, socket) do
 
-      IO.inspect "closeeeeeee"
+  #IO.inspect "closeeeeeee"
 
-  end
+  #end
 
 end

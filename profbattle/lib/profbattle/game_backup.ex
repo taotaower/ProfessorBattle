@@ -23,7 +23,19 @@ defmodule Profbattle.GameBackup do
     end
   end
 
+  def deleteOldStates() do
+    today = DateTime.utc_now()
+    Agent.get __MODULE__, fn state ->
+      for  {k, v}  <-  state  do
+        if (v.lastAction.day <= today.day && v.lastAction.hour + 2 < today.hour) do
+          delete(k)
+        end
+      end
+    end
+  end
+
   def getStates() do
+    deleteOldStates()
     Agent.get __MODULE__, fn set ->
       {Enum.into(set, [])}
     end

@@ -1,7 +1,6 @@
 defmodule Profbattle.Game do
 
   def new do
-    # new will randomly create 3 profs to player1
     %{
       gameState: 0,
       round: 0, #delete maybe
@@ -14,7 +13,7 @@ defmodule Profbattle.Game do
       profNumPlayer2: 0,
       phrase: "",
       msg: "",
-
+      lastAction: DateTime.utc_now()
     }
   end
 
@@ -171,6 +170,7 @@ defmodule Profbattle.Game do
       phrase2: phrase2,
       phrase: "",
       msg: msg,
+      lastAction: DateTime.utc_now()
     }
 
   end
@@ -265,6 +265,7 @@ defmodule Profbattle.Game do
       phrase2: phrase2,
       phrase: "",
       msg: msg,
+      lastAction: DateTime.utc_now()
     }
 
 
@@ -363,6 +364,7 @@ def swap(playerTeam,number,prof) do
       phrase2: phrase2,
       phrase: "",
       msg: msg,
+      lastAction: DateTime.utc_now()
     }
 
 
@@ -412,6 +414,7 @@ def swap(playerTeam,number,prof) do
       phrase2: phrase2,
       phrase: "",
       msg: "",
+      lastAction: DateTime.utc_now()
     }
 
 
@@ -460,6 +463,7 @@ def swap(playerTeam,number,prof) do
       phrase2: phrase2,
       phrase: "",
       msg: "",
+      lastAction: DateTime.utc_now()
     }
 
   end
@@ -510,6 +514,7 @@ def swap(playerTeam,number,prof) do
       profNumPlayer2: 0,
       phrase: "",
       msg: "",
+      lastAction: DateTime.utc_now()
 
     }
   end
@@ -556,6 +561,7 @@ def swap(playerTeam,number,prof) do
         phrase1: phrase1,
         phrase2: phrase2,
         msg: "",
+        lastAction: DateTime.utc_now()
       }
 
       else
@@ -572,6 +578,7 @@ def swap(playerTeam,number,prof) do
         profNumPlayer1: profNumPlayer1,
         profNumPlayer2: profNumPlayer2,
         msg: "",
+        lastAction: DateTime.utc_now()
       }
     end
   end
@@ -608,10 +615,10 @@ def swap(playerTeam,number,prof) do
 
     [
       %{id: 0, openPhrase: "I hope you've prepared questions for me" , winPhrase: "You may sit down now" ,attackPhrase: ["The problem with Scotland, is that it is full of Scots","Stand up when you address me"]},
-      %{id: 1, openPhrase: "Good morning everybody!", winPhrase: "Good luck for your homework" ,attackPhrase: ["Most of our time in class will spend on installing dependencies","Create a server for me in Elixir"]},
-      %{id: 2, openPhrase: "Wait, these slides don't look familiar", winPhrase: "Obviously, You didn't read the slides" ,attackPhrase: ["R2-D2 is better than BB-8"]},
+      %{id: 1, openPhrase: "Good morning everybody!", winPhrase: "Good luck with your homework" ,attackPhrase: ["Most of our time in class will be spent on installing dependencies","Create a server for me in Elixir"]},
+      %{id: 2, openPhrase: "Wait, these slides don't look familiar", winPhrase: "You obviously didn't read the slides" ,attackPhrase: ["R2-D2 is better than BB-8"]},
       %{id: 3, openPhrase: "What shall we discuss today?", winPhrase: "My notes will be available on Blackboard" ,attackPhrase: ["Prove this","Your assertions are invalid","1. Suppose for contradiction that {J1} ∪ R is not optimal for I.; 2. Since R ⊆ D, each job in R is pairwise disjoint from J1, so {J1} ∪ R is feasible for I.; 3. Since {J1} ∪ R is not optimal for I, it must be that there exists a larger feasible solution for I.; 4. Let S be a larger optimal solution for I, with J1 in S. (S exists by Lemma 1.);"]},
-      %{id: 4, openPhrase: "Hopefully, everybody did reading assignment", winPhrase: "You will get B, if your project only meet expectation" ,attackPhrase: ["Reading quiz time","Ni hao"]},
+      %{id: 4, openPhrase: "Hopefully, everybody did reading assignment", winPhrase: "You will get a B if your project only meets expectations" ,attackPhrase: ["Reading quiz time!","Ni hao"]},
       %{id: 5, openPhrase: "I'm Nate, not Nat", winPhrase: "Any questions so far?" ,attackPhrase: ["You are stuck here, Wohahahaha","I have no idea when the class ends"]},
     ]
 
@@ -704,7 +711,7 @@ def swap(playerTeam,number,prof) do
       bonusDamage = attack + 1 - defense
     end
 
-    hp = hp - (15 + (bonusDamage * 10))
+    hp = hp - (20 + (bonusDamage * 10))
 
 
   end
@@ -737,7 +744,7 @@ def swap(playerTeam,number,prof) do
     anger = defenseProf.anger
     special = Enum.fetch!(profs(),defenseProf.id).special
 
-    anger = anger + (special * 7) + (hpchange / 2) + 5
+    anger = anger + (special * 12) + (hpchange / 2) + 5
 
     if anger > 100 do
       anger = 100
